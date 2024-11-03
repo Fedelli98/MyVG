@@ -15,6 +15,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.Services.UserService;
 
 @Component
@@ -47,6 +48,9 @@ public class LoginController {
 
     private void loadUserProfile() {
     try {
+        //Recupera l'oggetto DTO di User da usare per caricare il profilo
+        UserDTO user = userService.getUserByUsername(usernameField.getText());
+        
         // Carica il file FXML per la pagina profilo
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UserProfile.fxml"));
         
@@ -57,7 +61,7 @@ public class LoginController {
         UserProfileController profileController = loader.getController();
         
         // Passa i dati dell'utente al controller della pagina profilo, se necessario
-        profileController.setUser(usernameField.getText(), 0);
+        profileController.setUser(user.getUsername(), user.getAvatarID());
 
         // Ottieni la scena corrente e sostituiscila con la nuova
         Scene profileScene = new Scene(profileRoot);

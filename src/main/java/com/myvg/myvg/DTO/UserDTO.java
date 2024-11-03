@@ -1,13 +1,12 @@
 package com.myvg.myvg.DTO;
 
-//Classe da usare per il trasferimento di dati tra il client e il server
+//Classe da usare per il trasferimento di dati tra il client e il server, non espone dati sensibili
 public class UserDTO {
     private String id;
     private String username;
     private String email;
     private int avatarID;
 
-    public UserDTO() {}
 
     public UserDTO(String Id, String username, String email, int avatarID) {
         this.id = Id;
