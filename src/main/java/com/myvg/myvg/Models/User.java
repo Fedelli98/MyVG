@@ -16,14 +16,17 @@ public class User {
     private String password;
     @Field(name = "email")
     private String email;
+    @Field(name = "avatarId")
+    private int avatarID;
 
     public User() {};
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email, int avatarID) {
         super();
         this.username = username;
         this.password = password;
         this.email = email;
+        this.avatarID = avatarID;
     }
 
     // Getters e Setters
@@ -38,6 +41,9 @@ public class User {
     
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public int getAvatarId() { return avatarID; }
+    public void setAvatarId(int id) { this.avatarID = id; }
 }
 
 

@@ -15,6 +15,8 @@ public class MongoConfig {
 
     @Value("${spring.data.mongodb.database}")
     private String mongoDatabase;
+
+    
     @Bean
     public MongoClient mongoClient() {
         return MongoClients.create(mongoUri);
