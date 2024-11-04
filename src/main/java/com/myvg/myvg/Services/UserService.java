@@ -19,7 +19,8 @@ public class UserService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public void registerUser(String username, String password, String email, int avatarID) {
+    public void registerUser(String username, String password, String email, int avatarID) throws IllegalArgumentException
+    {
         
         if (userDAO.findUserByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Username already exists");

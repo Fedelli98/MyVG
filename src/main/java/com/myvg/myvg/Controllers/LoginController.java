@@ -13,6 +13,7 @@ import javafx.scene.control.Alert;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators.Log;
 import org.springframework.stereotype.Component;
 
 import com.myvg.myvg.DTO.UserDTO;
@@ -81,11 +82,20 @@ public class LoginController {
         String username = registerUsernameField.getText();
         String password = registerPasswordField.getText();
         String email = emailField.getText();
+        
         if (username == "" && password == "" && email == "") {
             showAlert("Registration Failed", "Please fill in all fields.");
             return;
         }
-        userService.registerUser(username, password, email , -1);
+        
+        try
+        {
+            userService.registerUser(username, password, email , -1);
+        }
+        catch(Exception e)
+        {
+            showAlert("Error", e.getMessage());
+        }
     }
 
     private void showAlert(String title, String message) {
