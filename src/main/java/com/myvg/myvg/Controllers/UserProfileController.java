@@ -5,9 +5,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -19,14 +23,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import com.myvg.myvg.Services.UserService;
+
+@Controller
 public class UserProfileController {
 
+//#region FXML Attributes
     @FXML
     private ImageView profileImageView;
 
-
     @FXML
-    private TextField usernameField;
+    private Label usernameField;
 
     @FXML
     private TextField gameSearchField;
@@ -37,16 +47,33 @@ public class UserProfileController {
     @FXML
     private GridPane avatarGrid;
 
-    private static final int IMAGES_PER_PAGE = 10;
+    @FXML
+    private VBox avatarSelection;
+//#endregion
+
+    private static final int IMAGES_PER_PAGE = 9;
 
     private int currentPage = 0;
 
     private List<Image> avatars;
 
+    @Autowired
+    private UserService userService;
+
     @FXML
     public void initialize() {
         avatars = ImageLoader.loadAllImages();
-        loadAvatarPage();
+        Circle clip = new Circle(profileImageView.getFitWidth() / 2, profileImageView.getFitHeight() / 2, profileImageView.getFitWidth() / 2);
+        profileImageView.setClip(clip);
+    }
+
+    @FXML
+    private void toggleAvatarGrid() {
+        avatarSelection.setVisible(!avatarSelection.isVisible());
+        avatarSelection.setManaged(!avatarSelection.isManaged());
+        if (avatarSelection.isVisible()) {
+            loadAvatarPage();
+        }
     }
 
     // Metodo per caricare le immagini degli avatar nella GridPane
@@ -65,11 +92,15 @@ public class UserProfileController {
             avatarView.setFitHeight(50);
             avatarView.setFitWidth(50);
             int index = i;
-            avatarView.setOnMouseClicked(event -> profileImageView.setImage(avatars.get(index)));
+            avatarView.setOnMouseClicked(event -> 
+                {
+                    saveAvatar(index);
+                    profileImageView.setImage(avatars.get(index));
+                });
             avatarGrid.add(avatarView, column, row);
 
             column++;
-            if (column == 4) {
+            if (column == 3) {
                 column = 0;
                 row++;
             }
@@ -90,6 +121,10 @@ public class UserProfileController {
             currentPage--;
             loadAvatarPage();
         }
+    }
+
+    private void saveAvatar(int index) {
+        userService.updateAvatarID(usernameField.getText(), index);        
     }
 
     @FXML
@@ -117,13 +152,14 @@ public class UserProfileController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+
     public void setUser(String username, int avatarID) { 
         usernameField.setText(username);
         if (avatarID >=0) {
             profileImageView.setImage(avatars.get(avatarID));
         }
     }
-
 
     public class ImageLoader {
         public static final String IMAGE_PATH = "/images/avatars/";

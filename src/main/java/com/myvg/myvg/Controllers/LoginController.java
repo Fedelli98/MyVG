@@ -1,23 +1,17 @@
 package com.myvg.myvg.Controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
-import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators.Log;
 import org.springframework.stereotype.Component;
 
-import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.Services.UserService;
+import com.myvg.myvg.javafx.StageListener;
 
 @Component
 public class LoginController {
@@ -34,6 +28,8 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private StageListener stageListener;
 
     @FXML
     public void handleLogin() {
@@ -41,40 +37,16 @@ public class LoginController {
         String password = passwordField.getText();
 
         if (userService.loginUser(username, password)) {
-            loadUserProfile();
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stageListener.SwitchScene(stage, "/fxml/UserProfile.fxml", 
+            (UserProfileController controller) ->
+                {
+                    controller.setUser(userService.getUserByUsername(username).getUsername(), userService.getUserByUsername(username).getAvatarID()); 
+                });
         } else {
             showAlert("Login Failed", "Invalid username or password.");
         }
     }
-
-    private void loadUserProfile() {
-    try {
-        //Recupera l'oggetto DTO di User da usare per caricare il profilo
-        UserDTO user = userService.getUserByUsername(usernameField.getText());
-        
-        // Carica il file FXML per la pagina profilo
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UserProfile.fxml"));
-        
-        // Carica il layout
-        Parent profileRoot = loader.load();
-        
-        // Ottieni il controller della pagina profilo
-        UserProfileController profileController = loader.getController();
-        
-        // Passa i dati dell'utente al controller della pagina profilo, se necessario
-        profileController.setUser(user.getUsername(), user.getAvatarID());
-
-        // Ottieni la scena corrente e sostituiscila con la nuova
-        Scene profileScene = new Scene(profileRoot);
-        Stage currentStage = (Stage) usernameField.getScene().getWindow();
-        currentStage.setScene(profileScene);
-        currentStage.show();
-
-    } catch (IOException e) {
-        e.printStackTrace();
-        showAlert("Error", "Failed to load user profile.");
-    }
-}
 
 
     @FXML
@@ -87,14 +59,11 @@ public class LoginController {
             showAlert("Registration Failed", "Please fill in all fields.");
             return;
         }
-        
-        try
-        {
+        try{
             userService.registerUser(username, password, email , -1);
-        }
-        catch(Exception e)
-        {
-            showAlert("Error", e.getMessage());
+        }catch(Exception e){
+            showAlert("Registration Failed", e.getMessage());
+            return;
         }
     }
 

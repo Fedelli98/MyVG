@@ -19,8 +19,7 @@ public class UserService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public void registerUser(String username, String password, String email, int avatarID) throws IllegalArgumentException
-    {
+    public void registerUser(String username, String password, String email, int avatarID) throws IllegalArgumentException {
         
         if (userDAO.findUserByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Username already exists");
@@ -53,6 +52,11 @@ public class UserService {
             return new UserDTO(foundUser.getId(), foundUser.getUsername(), foundUser.getEmail(), foundUser.getAvatarId());
         }
         return null;
+    }
+
+    public UserDTO updateAvatarID(String username, int avatarID) {
+        userDAO.updateAvatarID(username, avatarID);
+        return getUserByUsername(username);
     }
     
 }

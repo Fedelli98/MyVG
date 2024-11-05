@@ -33,4 +33,13 @@ public class UserDAO {
     public Optional<User> findById(String id) {
         return Optional.ofNullable(mongoTemplate.findById(id, User.class));
     }
+
+    public Optional<User> updateAvatarID(String username, int avatarID) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("username").is(username));
+        User user = mongoTemplate.findOne(query, User.class);
+        user.setAvatarId(avatarID);
+        mongoTemplate.save(user);
+        return Optional.ofNullable(user);
+    }
 }
