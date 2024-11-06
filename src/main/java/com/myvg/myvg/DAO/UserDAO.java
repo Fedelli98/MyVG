@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import com.myvg.myvg.Models.User;
+import com.myvg.myvg.EntityModel.UserEntity;
 
 @Repository
 public class UserDAO {
@@ -19,25 +19,24 @@ public class UserDAO {
         this.mongoTemplate = mT;
     }
 
-    public void CreateUser(String username, String password, String email, int avatarID) {
-        User user = new User(username, password, email, avatarID);
-        mongoTemplate.save(user);
+    public void create(UserEntity userEntity) {
+        mongoTemplate.save(userEntity);
     }
     
-    public Optional<User> findUserByUsername(String username) {
+    public Optional<UserEntity> findUserByUsername(String username) {
         Query query = new Query();
         query.addCriteria(Criteria.where("username").is(username));
-        return Optional.ofNullable(mongoTemplate.findOne(query, User.class));
+        return Optional.ofNullable(mongoTemplate.findOne(query, UserEntity.class));
     }
 
-    public Optional<User> findById(String id) {
-        return Optional.ofNullable(mongoTemplate.findById(id, User.class));
+    public Optional<UserEntity> findById(String id) {
+        return Optional.ofNullable(mongoTemplate.findById(id, UserEntity.class));
     }
 
-    public Optional<User> updateAvatarID(String username, int avatarID) {
+    public Optional<UserEntity> updateAvatarID(String username, int avatarID) {
         Query query = new Query();
         query.addCriteria(Criteria.where("username").is(username));
-        User user = mongoTemplate.findOne(query, User.class);
+        UserEntity user = mongoTemplate.findOne(query, UserEntity.class);
         user.setAvatarId(avatarID);
         mongoTemplate.save(user);
         return Optional.ofNullable(user);

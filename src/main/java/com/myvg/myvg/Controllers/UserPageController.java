@@ -7,11 +7,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import java.util.Arrays;
+
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,13 +21,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+
+import com.myvg.myvg.DTO.VideogameDTO;
+import com.myvg.myvg.DAO.VideogameDAO;
+import com.myvg.myvg.EntityModel.ReviewEntity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.myvg.myvg.Services.UserService;
+import com.myvg.myvg.Services.SceneService;
+import com.myvg.myvg.DTO.UserDTO;
 
 @Controller
-public class UserProfileController {
+public class UserPageController {
 
 //#region FXML Attributes
     @FXML
@@ -59,6 +64,9 @@ public class UserProfileController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SceneService sceneService;
 
     @FXML
     public void initialize() {
@@ -129,35 +137,29 @@ public class UserProfileController {
 
     @FXML
     private void onCreateWishlist() {
-        showAlert("Wishlist Created", "Your wishlist has been created successfully.");
+        sceneService.showAlert("Wishlist Created", "Your wishlist has been created successfully.");
     }
 
     @FXML
     private void onGameSearch() {
-        String searchText = gameSearchField.getText();
-        showAlert("Game Search", "Searching for games: " + searchText);
+
+        sceneService.switchScene("/fxml/VideoGameSearch.fxml", 
+        (VideogameSearchController controller) -> 
+        {
+            controller.setQuery(gameSearchField.getText());
+        });
     }
 
     @FXML
     private void onUserSearch() {
-        String searchText = userSearchField.getText();
-        showAlert("User Search", "Searching for users: " + searchText);
+
+        sceneService.showAlert("User Search", "Searching for users: " + userSearchField.getText());
     }
 
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-
-    public void setUser(String username, int avatarID) { 
-        usernameField.setText(username);
-        if (avatarID >=0) {
-            profileImageView.setImage(avatars.get(avatarID));
+    public void setUser(UserDTO user) { 
+        usernameField.setText(user.getUsername());
+        if (user.getAvatarID() >=0) {
+            profileImageView.setImage(avatars.get(user.getAvatarID()));
         }
     }
 

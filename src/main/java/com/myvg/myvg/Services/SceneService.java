@@ -3,7 +3,6 @@ package com.myvg.myvg.Services;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-import org.springframework.boot.util.LambdaSafe.Callback;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -56,7 +55,7 @@ public class SceneService {
  * 
  * @author Luca Pandolfini
  */
-    public <T> void switchScene(String fxmlPath, Consumer<T> beforeShowing) {
+    public <T> void switchScene(String fxmlPath, Consumer<T> initializer) {
         try 
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -67,9 +66,9 @@ public class SceneService {
 
             var controller = loader.getController();
 
-            if(beforeShowing != null && controller != null)
+            if(initializer != null && controller != null)
             {
-                beforeShowing.accept((T)controller);
+                initializer.accept((T)controller);
             }
 
             stage.show();

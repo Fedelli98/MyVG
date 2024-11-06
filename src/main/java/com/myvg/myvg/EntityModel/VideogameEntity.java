@@ -1,4 +1,4 @@
-package com.myvg.myvg.Models;
+package com.myvg.myvg.EntityModel;
 
 import java.util.List;
 
@@ -7,8 +7,10 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.myvg.myvg.DTO.VideogameDTO;
+
 @Document(collection = "videogames")
-public class Videogame {
+public class VideogameEntity {
     
     @Id
     private String id;
@@ -22,15 +24,26 @@ public class Videogame {
     private List<String> platform;
     @DBRef
     @Field(name = "reviews")
-    private List<Review> reviews;
+    private List<ReviewEntity> reviews;
 
-    public Videogame(String title, String genre, int releaseYear, List<String> platform, List<Review> reviews) {
+    public VideogameEntity() {};
+
+    public VideogameEntity(String title, String genre, int releaseYear, List<String> platform, List<ReviewEntity> reviews) {
         super();
         this.title = title;
         this.genre = genre;
         this.releaseYear = releaseYear;
         this.platform = platform;
         this.reviews = reviews;
+    }
+
+    public VideogameEntity(VideogameDTO videogameDTO) {
+        super();
+        this.title = videogameDTO.getTitle();
+        this.genre = videogameDTO.getGenre();
+        this.releaseYear = videogameDTO.getReleaseYear();
+        this.platform = videogameDTO.getPlatform();
+        this.reviews = videogameDTO.getReviews();
     }
 
     public String getId() { return id; }
@@ -48,6 +61,6 @@ public class Videogame {
     public List<String> getPlatform() { return platform; }
     public void setPlatform(List<String> platform) { this.platform = platform; }
 
-    public List<Review> getReviews() { return reviews; }
-    public void setReviews(List<Review> reviews) { this.reviews = reviews; }
+    public List<ReviewEntity> getReviews() { return reviews; }
+    public void setReviews(List<ReviewEntity> reviews) { this.reviews = reviews; }
 }

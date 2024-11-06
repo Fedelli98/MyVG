@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.myvg.myvg.Controllers.ReviewSnippetController"
+      spacing="10"
+      style="-fx-padding: 10; -fx-background-color: #f0f0f0; -fx-background-radius: 5;">
+
+    <!-- Left side - User info -->
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Circle fx:id="userIcon" radius="20" fill="#cccccc"/>
+        <Text fx:id="usernameText" style="-fx-font-size: 14;"/>
+    </VBox>
+
+    <!-- Right side - Review content -->
+    <VBox spacing="5" HBox.hgrow="ALWAYS">
+        <HBox alignment="CENTER_RIGHT">
+            <Text fx:id="ratingText" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+        </HBox>
+        <Text fx:id="commentText" wrappingWidth="300"/>
+    </VBox>
+
+</HBox>

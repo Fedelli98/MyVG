@@ -2,7 +2,7 @@ package com.myvg.myvg.Services;
 
 import com.myvg.myvg.DAO.UserDAO;
 import com.myvg.myvg.DTO.UserDTO;
-import com.myvg.myvg.Models.User;
+import com.myvg.myvg.EntityModel.UserEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,30 +26,28 @@ public class UserService {
         }
         
         String encodedPassword = passwordEncoder.encode(password);
-        userDAO.CreateUser(username, encodedPassword, email, avatarID);
+        userDAO.create(new UserEntity(username, encodedPassword, email, avatarID));
     }
 
     public boolean loginUser(String username, String password) {
         
-        Optional<User> user = userDAO.findUserByUsername(username);
+        Optional<UserEntity> user = userDAO.findUserByUsername(username);
         String encodedPassword = user.get().getPassword();
         return user.isPresent() && passwordEncoder.matches(password, encodedPassword);
     }
 
     public UserDTO getUserById(String id) {
-        Optional<User> user = userDAO.findById(id);
+        Optional<UserEntity> user = userDAO.findById(id);
         if (user.isPresent()) {
-            User foundUser = user.get();
-            return new UserDTO(foundUser.getId(), foundUser.getUsername(), foundUser.getEmail(), foundUser.getAvatarId());
+            return new UserDTO(user.get());
         }
         return null;
     }
 
     public UserDTO getUserByUsername(String username) {
-        Optional<User> user = userDAO.findUserByUsername(username);
+        Optional<UserEntity> user = userDAO.findUserByUsername(username);
         if (user.isPresent()) {
-            User foundUser = user.get();
-            return new UserDTO(foundUser.getId(), foundUser.getUsername(), foundUser.getEmail(), foundUser.getAvatarId());
+            return new UserDTO(user.get());
         }
         return null;
     }

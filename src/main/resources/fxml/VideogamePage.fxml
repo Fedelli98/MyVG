@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.myvg.myvg.Controllers.VideogamePageController"
+      spacing="10"
+      alignment="TOP_CENTER"
+      style="-fx-padding: 20;">
+
+    <HBox spacing="20" alignment="CENTER">
+        <VBox spacing="5">
+            <Text fx:id="titleText" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+            <Text fx:id="genreText" style="-fx-font-size: 16;"/>
+            <Text fx:id="releaseYearText" style="-fx-font-size: 16;"/>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="5">
+        <Label text="Platforms:" style="-fx-font-weight: bold;"/>
+        <FlowPane fx:id="platformContainer" hgap="10" vgap="5"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Reviews:" style="-fx-font-weight: bold;"/>
+        <ScrollPane fitToWidth="true" prefHeight="400">
+            <VBox fx:id="reviewContainer" spacing="10">
+                <!-- ReviewThumbnail components will be added here dynamically -->
+            </VBox>
+        </ScrollPane>
+    </VBox>
+
+    <Button text="Add Review" onAction="#onAddReview"/>
+
+</VBox>

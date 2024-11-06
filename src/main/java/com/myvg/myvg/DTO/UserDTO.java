@@ -1,6 +1,7 @@
 package com.myvg.myvg.DTO;
 
-//Classe da usare per il trasferimento di dati tra il client e il server, non espone dati sensibili
+import com.myvg.myvg.EntityModel.UserEntity;
+
 public class UserDTO {
     private String id;
     private String username;
@@ -8,11 +9,17 @@ public class UserDTO {
     private int avatarID;
 
 
-    public UserDTO(String Id, String username, String email, int avatarID) {
-        this.id = Id;
+    public UserDTO(String username, String email, int avatarID) {
         this.username = username;
         this.email = email;
         this.avatarID = avatarID;
+    }
+
+    public UserDTO(UserEntity userEntity) {
+        this.id = userEntity.getId();
+        this.username = userEntity.getUsername();
+        this.email = userEntity.getEmail();
+        this.avatarID = userEntity.getAvatarId();
     }
 
     public String getId() { return id; }

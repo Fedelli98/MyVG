@@ -1,11 +1,13 @@
-package com.myvg.myvg.Models;
+package com.myvg.myvg.EntityModel;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.myvg.myvg.DTO.UserDTO;
+
 @Document(collection = "users")
-public class User {
+public class UserEntity {
     @Id
     private String id;
     @Field(name = "username")
@@ -17,14 +19,21 @@ public class User {
     @Field(name = "avatarId")
     private int avatarID;
 
-    public User() {};
+    public UserEntity() {};
 
-    public User(String username, String password, String email, int avatarID) {
+    public UserEntity(String username, String password, String email, int avatarID) {
         super();
         this.username = username;
         this.password = password;
         this.email = email;
         this.avatarID = avatarID;
+    }
+
+    public UserEntity(UserDTO userDTO) {
+        super();
+        this.username = userDTO.getUsername();
+        this.email = userDTO.getEmail();
+        this.avatarID = userDTO.getAvatarID();
     }
 
     // Getters e Setters

@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.myvg.myvg.Controllers.UserProfileController" prefHeight="600.0" prefWidth="600.0">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.myvg.myvg.Controllers.UserPageController" prefHeight="600.0" prefWidth="600.0">
     <center>
         <VBox alignment="CENTER" spacing="20">
             <!-- Immagine del profilo attuale -->

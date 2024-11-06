@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.myvg.myvg.Controllers.ReviewPageController"
+      spacing="15"
+      alignment="TOP_CENTER"
+      style="-fx-padding: 20;">
+
+    <Label text="Write Your Review" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+    <VBox spacing="5">
+        <Label text="Rating (out of 10):" style="-fx-font-weight: bold;"/>
+        <Spinner fx:id="ratingSpinner" min="1" max="10" initialValue="5" editable="true"/>
+    </VBox>
+
+    <VBox spacing="5" VBox.vgrow="ALWAYS">
+        <Label text="Your Comment:" style="-fx-font-weight: bold;"/>
+        <TextArea fx:id="commentArea" wrapText="true" prefRowCount="10"/>
+    </VBox>
+
+    <Button text="Post Review" 
+            onAction="#handlePostReview"
+            style="-fx-font-size: 14;"
+            prefWidth="200"/>
+
+</VBox>

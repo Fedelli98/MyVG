@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+
+
+<Button xmlns:fx="http://javafx.com/fxml" styleClass="game-button" fx:controller="com.myvg.myvg.Controllers.VideogameThumbnailController" onAction="#handleGameButtonClick">
+    <graphic>
+        <VBox alignment="CENTER" spacing="5">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            
+            <ImageView fx:id="gameImage" fitWidth="150" fitHeight="200" preserveRatio="true"/>
+            
+            <Label fx:id="titleLabel" wrapText="true" textAlignment="CENTER"/>
+            
+            <Label fx:id="scoreLabel" styleClass="score-label"/>
+        </VBox>
+    </graphic>
+</Button>
+
