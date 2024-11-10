@@ -7,7 +7,7 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.FlowPane;
 import java.util.ArrayList;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class VideogameSearchController
     private VideogameDAO videogameDAO;
 
     @FXML
-    private VBox gamesContainer;
+    private FlowPane gamesContainer;
 
     private List<VideogameDTO> gamesToDisplay = new ArrayList<>();
     
@@ -94,9 +94,5 @@ public class VideogameSearchController
                 e.printStackTrace();
             }
         }
-        
-        //TODO: orrible, fix later
-        gamesContainer.getScene().getWindow().setWidth(400);
-        gamesContainer.getScene().getWindow().setHeight(600);
     }
 }

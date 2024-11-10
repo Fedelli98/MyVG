@@ -3,20 +3,20 @@ import com.myvg.myvg.DTO.VideogameDTO;
 
 public class VideogameThumbnail {
     private String title;
-    private String imageUrl;
+    private String imagePath;
     private int avgRating;
 
     public VideogameThumbnail() {}
 
     public VideogameThumbnail(String title, String imageUrl, int avgRating) {
         this.title = title;
-        this.imageUrl = imageUrl;
+        this.imagePath = imageUrl;
         this.avgRating = avgRating;
     }
 
     public VideogameThumbnail(VideogameDTO videogame) {
         this.title = videogame.getTitle();
-        //this.imageUrl = videogame.getImage();
+        this.imagePath = videogame.getVideogameCoverPath();
         this.avgRating = (int) videogame.getReviews().stream()
             .mapToInt(review -> review.getRating())
             .average()
@@ -31,12 +31,12 @@ public class VideogameThumbnail {
         this.title = title;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public int getReviewScore() {

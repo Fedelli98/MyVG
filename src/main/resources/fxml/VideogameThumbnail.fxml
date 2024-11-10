@@ -4,21 +4,56 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
 
-
-<Button xmlns:fx="http://javafx.com/fxml" styleClass="game-button" fx:controller="com.myvg.myvg.Controllers.VideogameThumbnailController" onAction="#handleGameButtonClick">
+<Button xmlns:fx="http://javafx.com/fxml" 
+        styleClass="game-button" 
+        fx:controller="com.myvg.myvg.Controllers.VideogameThumbnailController"
+        onAction="#handleGameButtonClick"
+        prefWidth="250" 
+        prefHeight="380"
+        minWidth="250"
+        minHeight="380"
+        maxWidth="250"
+        maxHeight="380"
+        style="-fx-background-color: transparent; -fx-border-color: #cccccc; -fx-border-radius: 10;">
+    <effect>
+        <DropShadow color="#00000033" radius="10" spread="0.1"/>
+    </effect>
     <graphic>
-        <VBox alignment="CENTER" spacing="5">
+        <VBox alignment="CENTER" spacing="10" style="-fx-background-radius: 10;" prefWidth="220">
             <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
+                <Insets top="15" right="15" bottom="15" left="15"/>
             </padding>
+            <StackPane fx:id="gameImageContainer"
+                      prefWidth="180" 
+                      prefHeight="240"
+                      minWidth="180"
+                      minHeight="240"
+                      maxWidth="180"
+                      maxHeight="240"
+                      style="-fx-background-color: transparent;">
+                <ImageView fx:id="gameImage" 
+                          fitWidth="180" 
+                          fitHeight="240" 
+                          preserveRatio="true">
+                    <effect>
+                        <DropShadow color="#00000066" radius="5"/>
+                    </effect>
+                </ImageView>
+            </StackPane>
             
-            <ImageView fx:id="gameImage" fitWidth="150" fitHeight="200" preserveRatio="true"/>
+            <Label fx:id="titleLabel" 
+                   wrapText="true" 
+                   textAlignment="CENTER"
+                   maxWidth="200"
+                   alignment="CENTER"
+                   style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
             
-            <Label fx:id="titleLabel" wrapText="true" textAlignment="CENTER"/>
-            
-            <Label fx:id="scoreLabel" styleClass="score-label"/>
+            <Label fx:id="scoreLabel" 
+                   styleClass="score-label"
+                   style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5;"/>
         </VBox>
     </graphic>
 </Button>
-
