@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 
 import com.myvg.myvg.Services.UserService;
 import com.myvg.myvg.Services.SceneService;
+import com.myvg.myvg.Services.AppContext;
+import com.myvg.myvg.DTO.UserDTO;
 
 
 @Controller
@@ -37,10 +39,12 @@ public class LoginController {
 
         if (userService.loginUser(username, password)) 
         {
+            UserDTO user = userService.getUserByUsername(username);
+            AppContext.getInstance().setCurrentUser(user);
             sceneService.switchScene("/fxml/UserPage.fxml", 
             (UserPageController controller) -> 
             {
-                controller.setUser(userService.getUserByUsername(username)); 
+                controller.setUser(); 
             });
         } 
         else 

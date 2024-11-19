@@ -33,7 +33,9 @@
             </VBox>
         </ScrollPane>
     </VBox>
-
-    <Button text="Add Review" onAction="#onAddReview"/>
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Back" onAction="#onBack"/>
+        <Button text="Add Review" onAction="#onAddReview"/>
+    </HBox>
 
 </VBox>

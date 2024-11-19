@@ -13,6 +13,7 @@ import com.myvg.myvg.EntityModel.ReviewEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.myvg.myvg.Services.SceneService;
+import com.myvg.myvg.Services.AppContext;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -33,8 +34,9 @@ public class VideogamePageController {
     @Autowired
     private SceneService sceneService;
 
-    public void setVideogame(VideogameDTO videogameDTO) {
-        this.videogameDTO = videogameDTO;
+    public void setVideogame() {
+        this.videogameDTO = AppContext.getInstance().getCurrentVideogame();
+
         titleText.setText(videogameDTO.getTitle());
         genreText.setText("Genre: " + videogameDTO.getGenre());
         releaseYearText.setText("Released: " + videogameDTO.getReleaseYear());
@@ -54,13 +56,16 @@ public class VideogamePageController {
                 VBox reviewBox = new VBox(5);
                 reviewBox.setStyle("-fx-padding: 10; -fx-background-color: #f8f8f8; -fx-background-radius: 5;");
                 
+                Text usernameText = new Text(review.getUsername());
+                usernameText.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+                
                 Text reviewText = new Text(review.getComment());
                 reviewText.setWrappingWidth(400);
                 
                 Text scoreText = new Text("Score: " + review.getRating() + "/10");
                 scoreText.setStyle("-fx-font-weight: bold;");
                 
-                reviewBox.getChildren().addAll(scoreText, reviewText);
+                reviewBox.getChildren().addAll(usernameText, scoreText, reviewText);
                 reviewContainer.getChildren().add(reviewBox);
             }
         }
@@ -68,8 +73,19 @@ public class VideogamePageController {
 
     @FXML
     private void onAddReview() {
-        sceneService.switchScene("/fxml/ReviewPage.fxml", (ReviewPageController controller) -> {
-            controller.setGameContext(this.videogameDTO);
+        sceneService.switchScene("/fxml/ReviewPage.fxml", 
+        (ReviewPageController controller) -> {
+            controller.setGameContext();
+        });
+    }
+
+    @FXML
+    private void onBack() {
+        AppContext.getInstance().clearCurrentVideogame();
+
+        sceneService.switchScene("/fxml/VideogameSearch.fxml", 
+        (VideogameSearchController controller) -> {
+            controller.setGames();
         });
     }
 

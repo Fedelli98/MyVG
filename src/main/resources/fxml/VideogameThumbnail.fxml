@@ -51,9 +51,14 @@
                    alignment="CENTER"
                    style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
             
-            <Label fx:id="scoreLabel" 
-                   styleClass="score-label"
-                   style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5;"/>
+            <VBox spacing="5" alignment="CENTER">
+                <Label fx:id="scoreLabel" 
+                      style="-fx-text-fill: #333333;"/>
+                <ProgressBar fx:id="ratingBar" 
+                           prefWidth="150" 
+                           progress="0.0"
+                           style="-fx-accent: #4CAF50;"/>
+            </VBox>
         </VBox>
     </graphic>
 </Button>

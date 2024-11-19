@@ -12,10 +12,10 @@ import com.myvg.myvg.DTO.ReviewDTO;
 public class ReviewEntity {
     @Id
     private String id;
-    @Field(name = "userId")
-    private String userId;  
-    @Field(name = "videogameId")
-    private String videogameId;
+    @Field(name = "username")
+    private String username;  
+    @Field(name = "videogameTitle")
+    private String videogameTitle;
     @Field(name = "rating")
     private int rating;
     @Field(name = "comment")
@@ -23,24 +23,24 @@ public class ReviewEntity {
 
     public ReviewEntity() {}
 
-    public ReviewEntity(String userId, String videogameId, int rating, String comment) {
+    public ReviewEntity(String username, String videogameTitle, int rating, String comment) {
         super();
-        this.userId = userId;
-        this.videogameId = videogameId;
+        this.username = username;
+        this.videogameTitle = videogameTitle;
         this.rating = rating;
         this.comment = comment;
     }
 
     public ReviewEntity(ReviewEntity review) {
-        this.userId = review.getUserId();
-        this.videogameId = review.getVideogameId();
+        this.username = review.getUsername();
+        this.videogameTitle = review.getVideogameTitle();
         this.rating = review.getRating();
         this.comment = review.getComment();
     }
 
     public ReviewEntity(ReviewDTO reviewDTO) {
-        this.userId = reviewDTO.getUserDTO().getId();
-        this.videogameId = reviewDTO.getVideogameDTO().getId();
+        this.username = reviewDTO.getUserDTO().getUsername();
+        this.videogameTitle = reviewDTO.getVideogameDTO().getTitle();
         this.rating = reviewDTO.getRating();
         this.comment = reviewDTO.getComment();
     }
@@ -48,11 +48,11 @@ public class ReviewEntity {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getVideogameId() { return videogameId; }
-    public void setVideogameId(String videogameId) { this.videogameId = videogameId; }
+    public String getVideogameTitle() { return videogameTitle; }
+    public void setVideogameTitle(String videogameTitle) { this.videogameTitle = videogameTitle; }
 
     public int getRating() { return rating; }
     public void setRating(int rating) { this.rating = rating; }

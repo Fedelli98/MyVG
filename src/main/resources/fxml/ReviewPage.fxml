@@ -24,9 +24,17 @@
         <TextArea fx:id="commentArea" wrapText="true" prefRowCount="10"/>
     </VBox>
 
-    <Button text="Post Review" 
-            onAction="#handlePostReview"
-            style="-fx-font-size: 14;"
-            prefWidth="200"/>
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Back" 
+                onAction="#onBack"
+                style="-fx-font-size: 14;"
+                prefWidth="200"/>
+                
+        <Button text="Post Review" 
+                onAction="#handlePostReview"
+                style="-fx-font-size: 14;"
+                prefWidth="200"/>
+    </HBox>
+
 
 </VBox>

@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import com.myvg.myvg.Services.SceneService;
 import com.myvg.myvg.DAO.VideogameDAO;
 import com.myvg.myvg.DTO.VideogameDTO;
+import com.myvg.myvg.Services.AppContext;
 
 @Controller
 public class VideogameSearchController 
@@ -37,7 +38,12 @@ public class VideogameSearchController
     @FXML
     private void onBack() 
     {
-        sceneService.switchScene("/fxml/UserPage.fxml");
+        AppContext.getInstance().clearCurrentQuery();
+
+        sceneService.switchScene("/fxml/UserPage.fxml", 
+            (UserPageController controller) -> {
+                controller.setUser();
+            });
     }
 
     /**
@@ -47,7 +53,7 @@ public class VideogameSearchController
      * 
      * @param query The search term to filter games by
      */
-    public void setQuery(String query) 
+    public void setGames(String query) 
     {
 
         gamesToDisplay.addAll(videogameDAO.findByTitle(query)
@@ -73,10 +79,21 @@ public class VideogameSearchController
                 .map(VideogameDTO::new)
                 .collect(Collectors.toList()));
             }
+            
+        AppContext.getInstance().setCurrentQuery(gamesToDisplay);
 
         // Clear existing thumbnails
         gamesContainer.getChildren().clear();
 
+        displayGames();
+    }
+
+    public void setGames() {
+        this.gamesToDisplay = AppContext.getInstance().getCurrentQuery();
+        displayGames();
+    }
+
+    private void displayGames() {
         // Add game thumbnails to container
         for (VideogameDTO game : gamesToDisplay) {
             try {

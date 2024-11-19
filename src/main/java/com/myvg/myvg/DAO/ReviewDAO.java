@@ -53,12 +53,12 @@ public class ReviewDAO {
         mongoTemplate.remove(query, ReviewEntity.class);
     }
 
-    public Optional<ReviewEntity> update(String id, ReviewEntity reviewUpdated) {
-        Optional<ReviewEntity> reviewDB = findById(id);
+    public Optional<ReviewEntity> update(ReviewEntity reviewUpdated) {
+        Optional<ReviewEntity> reviewDB = findById(reviewUpdated.getId());
         if (reviewDB.isPresent()) {
             ReviewEntity updatedReview = reviewDB.get();
-            updatedReview.setUserId(reviewUpdated.getUserId());
-            updatedReview.setVideogameId(reviewUpdated.getVideogameId());
+            updatedReview.setUsername(reviewUpdated.getUsername());
+            updatedReview.setVideogameTitle(reviewUpdated.getVideogameTitle());
             updatedReview.setRating(reviewUpdated.getRating());
             updatedReview.setComment(reviewUpdated.getComment());
             mongoTemplate.save(updatedReview);

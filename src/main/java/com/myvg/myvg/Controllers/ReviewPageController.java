@@ -1,24 +1,21 @@
 package com.myvg.myvg.Controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.myvg.myvg.DAO.ReviewDAO;
-import com.myvg.myvg.DAO.UserDAO;
-import com.myvg.myvg.DAO.VideogameDAO;
-import com.myvg.myvg.EntityModel.ReviewEntity;
-import com.myvg.myvg.Services.UserService;
 import com.myvg.myvg.Services.VideogameService;
 import com.myvg.myvg.DTO.VideogameDTO;
 import com.myvg.myvg.DTO.ReviewDTO;
 import com.myvg.myvg.DTO.UserDTO;
-
+import com.myvg.myvg.Services.AppContext;
 import com.myvg.myvg.Services.ReviewService;
 import com.myvg.myvg.Services.SceneService;
+import java.util.ArrayList;
+
 @Controller
 public class ReviewPageController {
     @FXML
@@ -26,9 +23,6 @@ public class ReviewPageController {
     
     @FXML
     private TextArea commentArea;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private VideogameService videogameService;
@@ -42,9 +36,9 @@ public class ReviewPageController {
     private UserDTO userDTO; // This should be set when user logs in
     private VideogameDTO videogameDTO; // This should be set when review page is opened for a specific game
 
-    public void setGameContext(VideogameDTO videogameDTO) {
-        this.videogameDTO = videogameDTO;
-        this.userDTO = userService.getUserByUsername("Muccarini");
+    public void setGameContext() {
+        videogameDTO = AppContext.getInstance().getCurrentVideogame();
+        userDTO = AppContext.getInstance().getCurrentUser();
     }
 
     @FXML
@@ -65,7 +59,6 @@ public class ReviewPageController {
         // Save to database
         try {
             reviewService.postReview(new ReviewDTO(this.userDTO, this.videogameDTO, rating, comment.trim()));
-            sceneService.showAlert("Success", "Your review has been successfully posted!");
 
             //update videogameDTO with new vgDTO revied
             videogameService.findGameById(this.videogameDTO.getId())
@@ -73,8 +66,37 @@ public class ReviewPageController {
                 this.videogameDTO = new VideogameDTO(vgEntity);
             });
 
-            sceneService.switchScene("/fxml/VideogamePage.fxml", (VideogamePageController controller) -> {
-                controller.setVideogame(this.videogameDTO);
+            //update AppContext current Videogame and update queryList
+            AppContext.getInstance().setCurrentVideogame(this.videogameDTO);
+
+            AppContext.getInstance().getCurrentQuery().forEach(vgQuery -> 
+            {
+                if(vgQuery.getId().equals(this.videogameDTO.getId())){
+                    vgQuery = this.videogameDTO;
+                }
+            }
+            );
+
+            //update queryList
+            var oldQuery = AppContext.getInstance().getCurrentQuery();
+
+            var newQuery = new ArrayList<VideogameDTO>();
+
+            oldQuery.forEach(oldVg ->
+            {
+                if(oldVg.getId().equals(this.videogameDTO.getId())){
+                    newQuery.add(this.videogameDTO);
+                }else{
+                    newQuery.add(oldVg);
+                }
+            });
+
+            AppContext.getInstance().setCurrentQuery(newQuery);
+
+            //switch scene
+            sceneService.switchScene("/fxml/VideogamePage.fxml", 
+            (VideogamePageController controller) -> {
+                controller.setVideogame();
             });
 
             // Clear forms
@@ -84,5 +106,13 @@ public class ReviewPageController {
         } catch (Exception e) {
             sceneService.showAlert("Error", e.getMessage());
         }
+    }
+
+    @FXML
+    private void onBack() {
+        sceneService.switchScene("/fxml/VideogamePage.fxml", 
+        (VideogamePageController controller) -> {
+            controller.setVideogame();
+        });
     }
 }

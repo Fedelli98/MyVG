@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import com.myvg.myvg.DTO.VideogameDTO;
 import com.myvg.myvg.DAO.VideogameDAO;
 import com.myvg.myvg.EntityModel.ReviewEntity;
-
+import com.myvg.myvg.Services.AppContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -142,11 +142,11 @@ public class UserPageController {
 
     @FXML
     private void onGameSearch() {
-
+        
         sceneService.switchScene("/fxml/VideoGameSearch.fxml", 
         (VideogameSearchController controller) -> 
         {
-            controller.setQuery(gameSearchField.getText());
+            controller.setGames(gameSearchField.getText());
         });
     }
 
@@ -156,7 +156,9 @@ public class UserPageController {
         sceneService.showAlert("User Search", "Searching for users: " + userSearchField.getText());
     }
 
-    public void setUser(UserDTO user) { 
+    public void setUser() { 
+        UserDTO user = AppContext.getInstance().getCurrentUser();
+        
         usernameField.setText(user.getUsername());
         if (user.getAvatarID() >=0) {
             profileImageView.setImage(avatars.get(user.getAvatarID()));

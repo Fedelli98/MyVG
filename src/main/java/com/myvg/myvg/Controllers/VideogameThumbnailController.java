@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ProgressBar;
 
 import com.myvg.myvg.Services.SceneService;
 import com.myvg.myvg.ViewComponentModel.VideogameThumbnail;
@@ -14,7 +15,7 @@ import com.myvg.myvg.DTO.VideogameDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.context.annotation.Scope;
-
+import com.myvg.myvg.Services.AppContext;
 
 //TODO: ADD SORT OF USER CONTEXT (AFTER LOGIN) AND VIDEOGAME CONTEXT (AFTER ENTERING IN A VIDEOGAME PAGE)
 
@@ -30,6 +31,12 @@ public class VideogameThumbnailController {
 
     @FXML
     private ImageView gameImage;
+
+    @FXML
+    private ProgressBar ratingBar;
+
+    @FXML
+    private Label scoreLabel;
 
     private VideogameDTO videogameDTO;
 
@@ -53,6 +60,11 @@ public class VideogameThumbnailController {
         VideogameThumbnail thumbnail = new VideogameThumbnail(videogameDTO);
         titleLabel.setText(thumbnail.getTitle());
         
+        // Imposta il rating
+        double rating = thumbnail.getReviewScore() / 10.0; // Converte il rating in un valore tra 0 e 1
+        ratingBar.setProgress(rating);
+        scoreLabel.setText(thumbnail.getReviewScore() + "/10");
+        
         // Carica l'immagine del gioco
         try {
             gameImage.setImage(loadGameImage(videogameDTO.getVideogameCoverPath()));
@@ -63,10 +75,11 @@ public class VideogameThumbnailController {
     
     @FXML
     private void handleGameButtonClick() {
+        AppContext.getInstance().setCurrentVideogame(videogameDTO);
         sceneService.switchScene("/fxml/VideogamePage.fxml", 
         (VideogamePageController vgPageController) -> 
         {
-            vgPageController.setVideogame(videogameDTO);
+            vgPageController.setVideogame();
         });
     }
 

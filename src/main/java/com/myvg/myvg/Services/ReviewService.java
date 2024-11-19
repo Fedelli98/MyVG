@@ -104,6 +104,6 @@ public class ReviewService {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
         }
         
-        return reviewDAO.update(id, reviewUpdated);
+        return reviewDAO.update(reviewUpdated);
     }
 }
