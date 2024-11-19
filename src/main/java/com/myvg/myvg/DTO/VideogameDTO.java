@@ -33,6 +33,8 @@ public class VideogameDTO {
         this.reviews = videogame.getReviews();
     }
 
+    public VideogameDTO(){}
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
