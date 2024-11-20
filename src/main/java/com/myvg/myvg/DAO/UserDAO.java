@@ -41,4 +41,12 @@ public class UserDAO {
         mongoTemplate.save(user);
         return Optional.ofNullable(user);
     }
+
+    public Optional<UserEntity> update(UserEntity user) {
+        if (user == null || user.getId() == null) {
+            return Optional.empty();
+        }
+        mongoTemplate.save(user);
+        return Optional.ofNullable(user);
+    }
 }

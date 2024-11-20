@@ -6,13 +6,17 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.control.Button;
 
+import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.DTO.VideogameDTO;
 import com.myvg.myvg.EntityModel.ReviewEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.myvg.myvg.Services.SceneService;
+import com.myvg.myvg.Services.UserService;
+import com.myvg.myvg.Services.VideogameService;
 import com.myvg.myvg.Services.AppContext;
 import org.springframework.stereotype.Controller;
 
@@ -28,11 +32,17 @@ public class VideogamePageController {
     private FlowPane platformContainer;
     @FXML
     private VBox reviewContainer;
+    @FXML
+    private Button addToWishlistButton;
 
     private VideogameDTO videogameDTO;
 
     @Autowired
+    private VideogameService videogameService;
+    @Autowired
     private SceneService sceneService;
+    @Autowired
+    private UserService userService;
 
     public void setVideogame() {
         this.videogameDTO = AppContext.getInstance().getCurrentVideogame();
@@ -87,6 +97,23 @@ public class VideogamePageController {
         (VideogameSearchController controller) -> {
             controller.setGames();
         });
+    }
+
+    @FXML
+    private void onAddToWishlist() {
+        //Retrieve context
+        UserDTO currentUser = AppContext.getInstance().getCurrentUser();
+        VideogameDTO currentGame = AppContext.getInstance().getCurrentVideogame();
+        
+        //Add to wishlist
+        videogameService.addToWishlist(currentUser.getId(), currentGame);
+        
+        //Update context
+        UserDTO user = userService.getUserById(currentUser.getId());
+        AppContext.getInstance().setCurrentUser(user);
+        for(VideogameDTO videogame : user.getWishlist()) {
+            System.out.println(videogame.getTitle());
+        }
     }
 
 }

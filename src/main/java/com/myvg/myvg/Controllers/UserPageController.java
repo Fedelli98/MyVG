@@ -136,11 +136,6 @@ public class UserPageController {
     }
 
     @FXML
-    private void onCreateWishlist() {
-        sceneService.showAlert("Wishlist Created", "Your wishlist has been created successfully.");
-    }
-
-    @FXML
     private void onGameSearch() {
         
         sceneService.switchScene("/fxml/VideoGameSearch.fxml", 
@@ -154,6 +149,15 @@ public class UserPageController {
     private void onUserSearch() {
 
         sceneService.showAlert("User Search", "Searching for users: " + userSearchField.getText());
+    }
+
+    @FXML
+    private void onWishlist() {
+        sceneService.switchScene("/fxml/WishlistPage.fxml",
+        (WishlistController controller)->
+        {
+            controller.displayGames();
+        });
     }
 
     public void setUser() { 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" 
+            fx:controller="com.myvg.myvg.Controllers.WishlistController">
+    <top>
+        <HBox alignment="CENTER">
+            <Label text="My Wishlist" style="-fx-font-size: 24;"/>
+        </HBox>
+    </top>
+    
+    <center>
+        <ScrollPane fitToWidth="true">
+            <FlowPane fx:id="wishlistContainer" 
+                     hgap="20" 
+                     vgap="20" 
+                     alignment="CENTER">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </FlowPane>
+        </ScrollPane>
+    </center>
+    
+    <bottom>
+        <Button text="Back" onAction="#onBack"/>
+    </bottom>
+</BorderPane>

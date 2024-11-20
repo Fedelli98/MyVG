@@ -1,5 +1,8 @@
 package com.myvg.myvg.EntityModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -18,8 +21,12 @@ public class UserEntity {
     private String email;
     @Field(name = "avatarId")
     private int avatarID;
+    @Field(name = "wishlist")
+    private List<VideogameEntity> wishlist = new ArrayList<>();
 
-    public UserEntity() {};
+    public UserEntity() {
+        this.wishlist = new ArrayList<>();
+    };
 
     public UserEntity(String username, String password, String email, int avatarID) {
         super();
@@ -27,6 +34,7 @@ public class UserEntity {
         this.password = password;
         this.email = email;
         this.avatarID = avatarID;
+        this.wishlist = new ArrayList<>();
     }
 
     public UserEntity(UserDTO userDTO) {
@@ -34,6 +42,7 @@ public class UserEntity {
         this.username = userDTO.getUsername();
         this.email = userDTO.getEmail();
         this.avatarID = userDTO.getAvatarID();
+        this.wishlist = new ArrayList<>();
     }
 
     // Getters e Setters
@@ -51,6 +60,9 @@ public class UserEntity {
 
     public int getAvatarId() { return avatarID; }
     public void setAvatarId(int id) { this.avatarID = id; }
+
+    public List<VideogameEntity> getWishlist() { return wishlist; }
+    public void setWishlist(List<VideogameEntity> wishlist) { this.wishlist = wishlist; }
 }
 
 

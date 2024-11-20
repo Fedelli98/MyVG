@@ -2,13 +2,17 @@ package com.myvg.myvg.Services;
 
 import com.myvg.myvg.DAO.UserDAO;
 import com.myvg.myvg.DTO.UserDTO;
+import com.myvg.myvg.DTO.VideogameDTO;
 import com.myvg.myvg.EntityModel.UserEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -56,5 +60,12 @@ public class UserService {
         userDAO.updateAvatarID(username, avatarID);
         return getUserByUsername(username);
     }
-    
+
+    public List<VideogameDTO> getWishlist(String userId) {
+        return userDAO.findById(userId)
+            .map(user -> user.getWishlist().stream()
+                .map(VideogameDTO::new)
+                .collect(Collectors.toList()))
+            .orElse(new ArrayList<>());
+    }
 }

@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myvg.myvg.DAO.ReviewDAO;
+import com.myvg.myvg.DAO.UserDAO;
 import com.myvg.myvg.DAO.VideogameDAO;
-import com.myvg.myvg.DTO.ReviewDTO;
 import com.myvg.myvg.DTO.VideogameDTO;
 import com.myvg.myvg.EntityModel.VideogameEntity;
-import com.myvg.myvg.EntityModel.ReviewEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +21,15 @@ public class VideogameService {
     @Autowired 
     private final ReviewDAO reviewDAO;
 
+    @Autowired
+    private final UserDAO userDAO;
+
     private final Mapper<VideogameDTO, VideogameEntity> mapper;
 
-    public VideogameService(VideogameDAO videogameDAO, ReviewDAO reviewDAO) {
+    public VideogameService(VideogameDAO videogameDAO, ReviewDAO reviewDAO, UserDAO userDAO) {
         this.videogameDAO = videogameDAO;
         this.reviewDAO = reviewDAO;
+        this.userDAO = userDAO;
 
         //TODO: move it to a config class
         this.mapper = MapperFactory.createMapper(VideogameDTO.class, VideogameEntity.class);
@@ -92,4 +95,16 @@ public class VideogameService {
     public void deleteGame(String id) {
         videogameDAO.delete(id);
     }
+
+    public void addToWishlist(String userId, VideogameDTO game) {
+        userDAO.findById(userId).ifPresent(user -> {
+            VideogameEntity gameEntity = new VideogameEntity(game);
+            if (!user.getWishlist().contains(gameEntity)) {
+                user.getWishlist().add(gameEntity);
+                userDAO.update(user);
+            }
+        });
+    }
+
 }
+

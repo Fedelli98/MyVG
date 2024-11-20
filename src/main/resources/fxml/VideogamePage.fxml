@@ -36,6 +36,8 @@
     <HBox spacing="10" alignment="CENTER">
         <Button text="Back" onAction="#onBack"/>
         <Button text="Add Review" onAction="#onAddReview"/>
+        <Button text="Add to Wishlist" onAction="#onAddToWishlist" 
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
     </HBox>
 
 </VBox>
