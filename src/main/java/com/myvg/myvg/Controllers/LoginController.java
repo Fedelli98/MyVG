@@ -4,13 +4,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.myvg.myvg.Services.UserService;
+import com.myvg.myvg.Services.VideogameService;
 import com.myvg.myvg.Services.SceneService;
 import com.myvg.myvg.Services.AppContext;
 import com.myvg.myvg.DTO.UserDTO;
+import com.myvg.myvg.DTO.VideogameDTO;
 
 
 @Controller
@@ -32,6 +37,9 @@ public class LoginController {
     @Autowired
     private SceneService sceneService;
 
+    @Autowired
+    private VideogameService videogameService;
+
     @FXML
     public void handleLogin() {
         String username = usernameField.getText();
@@ -44,7 +52,15 @@ public class LoginController {
             sceneService.switchScene("/fxml/UserPage.fxml", 
             (UserPageController controller) -> 
             {
-                controller.setUser(); 
+                controller.setUser();
+                //TEST per l'aggiunta di un videogioco tramite mapper
+                VideogameDTO videogameDTO = new VideogameDTO();
+                videogameDTO.setTitle("MapTest");
+                videogameDTO.setGenre("Platform");
+                videogameDTO.setReleaseYear(1985);
+                videogameDTO.setPlatform(List.of("potta"));
+                videogameDTO.setReviews(new ArrayList<>());
+                videogameService.createVideoGame(videogameDTO);
             });
         } 
         else 

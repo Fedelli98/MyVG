@@ -22,14 +22,22 @@ public class VideogameService {
     @Autowired 
     private final ReviewDAO reviewDAO;
 
+    private final Mapper<VideogameDTO, VideogameEntity> mapper;
+
     public VideogameService(VideogameDAO videogameDAO, ReviewDAO reviewDAO) {
         this.videogameDAO = videogameDAO;
         this.reviewDAO = reviewDAO;
+
+        //TODO: move it to a config class
+        this.mapper = MapperFactory.createMapper(VideogameDTO.class, VideogameEntity.class);
     }
 
     public void createVideoGame(VideogameDTO videogame) {
         //map dto to entity
-        VideogameEntity videogameEntity = new VideogameEntity(videogame);
+        //VideogameEntity videogameEntity = new VideogameEntity(videogame);
+        VideogameEntity videogameentity = new VideogameEntity();
+        videogameentity.setGenre("Action");
+        VideogameEntity videogameEntity = mapper.map(videogame, videogameentity);
         videogameDAO.create(videogameEntity);
     }
     
