@@ -54,13 +54,13 @@ public class LoginController {
             {
                 controller.setUser();
                 //TEST per l'aggiunta di un videogioco tramite mapper
-                /*VideogameDTO videogameDTO = new VideogameDTO();
+                VideogameDTO videogameDTO = new VideogameDTO();
                 videogameDTO.setTitle("MapTest");
                 videogameDTO.setGenre("Platform");
                 videogameDTO.setReleaseYear(1985);
                 videogameDTO.setPlatform(List.of("potta"));
                 videogameDTO.setReviews(new ArrayList<>());
-                videogameService.createVideoGame(videogameDTO);*/
+                videogameService.createVideoGame(videogameDTO);
             });
         } 
         else 

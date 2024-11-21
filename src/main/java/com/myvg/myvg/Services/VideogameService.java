@@ -32,7 +32,8 @@ public class VideogameService {
         this.userDAO = userDAO;
 
         //TODO: move it to a config class
-        this.mapper = MapperFactory.createMapper(VideogameDTO.class, VideogameEntity.class);
+        //this.mapper = MapperFactory.createMapper(VideogameDTO.class, VideogameEntity.class);
+        this.mapper = MapperFactory.createMapper(MapperType.VIDEOGAME_DTO_TO_ENTITY);
     }
 
     public void createVideoGame(VideogameDTO videogame) {
