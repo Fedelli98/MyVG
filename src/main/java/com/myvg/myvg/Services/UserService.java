@@ -68,4 +68,11 @@ public class UserService {
                 .collect(Collectors.toList()))
             .orElse(new ArrayList<>());
     }
+
+    public void removeFromWishlist(String userId, VideogameDTO videogame) {
+        userDAO.findById(userId).ifPresent(user -> {
+            user.getWishlist().removeIf(vg -> vg.getTitle().equals(videogame.getTitle()));
+            userDAO.update(user);
+        });
+    }
 }

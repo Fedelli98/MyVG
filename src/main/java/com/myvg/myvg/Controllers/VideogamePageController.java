@@ -105,15 +105,19 @@ public class VideogamePageController {
         UserDTO currentUser = AppContext.getInstance().getCurrentUser();
         VideogameDTO currentGame = AppContext.getInstance().getCurrentVideogame();
         
+        //Check if game already in wishlist
+        if(currentUser.getWishlist().stream()
+                .anyMatch(game -> game.getTitle().equals(currentGame.getTitle()))) {
+            sceneService.showAlert("Already in Wishlist", "This game is already in your wishlist!");
+            return;
+        }
+        
         //Add to wishlist
         videogameService.addToWishlist(currentUser.getId(), currentGame);
         
         //Update context
         UserDTO user = userService.getUserById(currentUser.getId());
         AppContext.getInstance().setCurrentUser(user);
-        for(VideogameDTO videogame : user.getWishlist()) {
-            System.out.println(videogame.getTitle());
-        }
     }
 
 }

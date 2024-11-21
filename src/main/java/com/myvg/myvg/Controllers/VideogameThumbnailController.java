@@ -51,7 +51,7 @@ public class VideogameThumbnailController {
             alert.setContentText("Non è stata trovata nessuna immagine per questo videogioco");
             alert.showAndWait();
             
-            return new WritableImage(100, 100); // Ritorna un'immagine vuota come fallback
+            return new WritableImage(100, 100); // Ritorna un'immagine vuota come callback
         }
     }
 
@@ -61,7 +61,7 @@ public class VideogameThumbnailController {
         titleLabel.setText(thumbnail.getTitle());
         
         // Imposta il rating
-        double rating = thumbnail.getReviewScore() / 10.0; // Converte il rating in un valore tra 0 e 1
+        double rating = thumbnail.getReviewScore() / 10.0; // Converte il rating in un valore tra 0 e 10
         ratingBar.setProgress(rating);
         scoreLabel.setText(thumbnail.getReviewScore() + "/10");
         

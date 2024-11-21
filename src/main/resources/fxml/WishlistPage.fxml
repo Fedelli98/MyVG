@@ -25,6 +25,8 @@
     </center>
     
     <bottom>
-        <Button text="Back" onAction="#onBack"/>
+        <HBox alignment="CENTER">
+            <Button text="Back" onAction="#onBack"/>
+        </HBox>
     </bottom>
 </BorderPane>

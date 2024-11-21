@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.myvg.myvg.Controllers.VideogameThumbnailWishlistController"
+      alignment="CENTER" spacing="10" style="-fx-background-radius: 10; -fx-border-color: #cccccc; -fx-border-width: 1;" prefWidth="220" prefHeight="600">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+    <StackPane fx:id="gameImageContainer"
+              prefWidth="180" 
+              prefHeight="240"
+              minWidth="180"
+              minHeight="240"
+              maxWidth="180"
+              maxHeight="240"
+              style="-fx-background-color: transparent;">
+        <ImageView fx:id="gameImage" 
+                  fitWidth="180" 
+                  fitHeight="240" 
+                  preserveRatio="true">
+            <effect>
+                <DropShadow color="#00000066" radius="5"/>
+            </effect>
+        </ImageView>
+    </StackPane>
+    
+    <Label fx:id="titleLabel" 
+           wrapText="true" 
+           textAlignment="CENTER"
+           maxWidth="200"
+           alignment="CENTER"
+           style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+    
+    <Label fx:id="scoreLabel" 
+           styleClass="score-label"
+           style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5;"/>
+
+    <Label fx:id="genreLabel" 
+           style="-fx-font-size: 14; -fx-text-fill: #666666;"/>
+    
+    <Label fx:id="releaseYearLabel" 
+           style="-fx-font-size: 14; -fx-text-fill: #666666;"/>
+    
+    <Label fx:id="platformLabel" 
+           wrapText="true" 
+           textAlignment="CENTER"
+           maxWidth="200"
+           alignment="CENTER"
+           style="-fx-font-size: 14; -fx-text-fill: #666666;"/>
+
+    <Button text="Rimuovi" onAction="#handleRemove" style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
+</VBox>

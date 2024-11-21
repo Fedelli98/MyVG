@@ -39,11 +39,11 @@ public class WishlistController {
                 wishlistContainer.getChildren().clear();
                 for (VideogameDTO game : wishlist) {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/VideogameThumbnail.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/VideogameThumbnailWishlist.fxml"));
                         loader.setControllerFactory(applicationContext::getBean);
                         Node thumbnail = loader.load();
                         
-                        VideogameThumbnailController controller = loader.getController();
+                        VideogameThumbnailWishlistController controller = loader.getController();
                         controller.setVideogame(game);
                         
                         wishlistContainer.getChildren().add(thumbnail);
