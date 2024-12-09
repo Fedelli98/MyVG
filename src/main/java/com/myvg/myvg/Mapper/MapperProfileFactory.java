@@ -5,17 +5,13 @@ import com.myvg.myvg.DTO.VideogameDTO;
 
 import java.util.List;
 
-enum MapperProfileEnum {
-    VIDEOGAME
-}
-
-//MapperProfile vgMapper;
-
-// vgMapper = MapperProfileFactory.createMapperProfile(MapperProfileEnum.VIDEOGAME)
-
-// dest = vgMapper.map(source, destination);
 
 public class MapperProfileFactory {
+    
+    public enum MapperProfileEnum {
+        VIDEOGAME
+        
+    }
 
     public static MapperProfile createMapperProfile(MapperProfileEnum profile) {
         switch (profile) {

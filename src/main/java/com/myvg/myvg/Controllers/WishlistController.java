@@ -46,6 +46,7 @@ public class WishlistController {
                         VideogameThumbnailWishlistController controller = loader.getController();
                         controller.setVideogame(game);
                         
+                        
                         wishlistContainer.getChildren().add(thumbnail);
                     } catch (IOException e) {
                         e.printStackTrace();

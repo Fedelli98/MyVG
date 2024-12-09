@@ -8,6 +8,9 @@ import com.myvg.myvg.DAO.UserDAO;
 import com.myvg.myvg.DAO.VideogameDAO;
 import com.myvg.myvg.DTO.VideogameDTO;
 import com.myvg.myvg.EntityModel.VideogameEntity;
+import com.myvg.myvg.Mapper.MapperProfile;
+import com.myvg.myvg.Mapper.MapperProfileFactory;
+import com.myvg.myvg.Mapper.MapperProfileFactory.MapperProfileEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,16 +27,17 @@ public class VideogameService {
     @Autowired
     private final UserDAO userDAO;
 
-    private final Mapper<VideogameDTO, VideogameEntity> mapper;
+    private final MapperProfile mapperProfile;
+
+    
 
     public VideogameService(VideogameDAO videogameDAO, ReviewDAO reviewDAO, UserDAO userDAO) {
         this.videogameDAO = videogameDAO;
         this.reviewDAO = reviewDAO;
         this.userDAO = userDAO;
-
         //TODO: move it to a config class
-        //this.mapper = MapperFactory.createMapper(VideogameDTO.class, VideogameEntity.class);
-        this.mapper = MapperFactory.createMapper(MapperType.VIDEOGAME_DTO_TO_ENTITY);
+        this.mapperProfile = MapperProfileFactory.createMapperProfile(MapperProfileEnum.VIDEOGAME);
+
     }
 
     public void createVideoGame(VideogameDTO videogame) {
@@ -41,7 +45,7 @@ public class VideogameService {
         //VideogameEntity videogameEntity = new VideogameEntity(videogame);
         VideogameEntity videogameentity = new VideogameEntity();
         videogameentity.setGenre("Action");
-        VideogameEntity videogameEntity = mapper.map(videogame, videogameentity);
+        VideogameEntity videogameEntity = mapperProfile.map(videogame, videogameentity);
         videogameDAO.create(videogameEntity);
     }
     
