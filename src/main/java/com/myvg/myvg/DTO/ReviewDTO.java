@@ -1,6 +1,5 @@
 package com.myvg.myvg.DTO;
 
-import com.myvg.myvg.EntityModel.ReviewEntity;
 
 public class ReviewDTO {
     private String id;
