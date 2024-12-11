@@ -58,7 +58,7 @@ public class ReviewPageController {
 
         // Save to database
         try {
-            reviewService.postReview(new ReviewDTO(this.userDTO, this.videogameDTO, rating, comment.trim()));
+            reviewService.postReview(new ReviewDTO(this.userDTO, this.videogameDTO, rating, comment.trim(),0));
 
             //update videogameDTO with new vgDTO revied
             videogameService.findGameById(this.videogameDTO.getId())

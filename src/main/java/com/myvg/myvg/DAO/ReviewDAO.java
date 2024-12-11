@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.myvg.myvg.EntityModel.ReviewEntity;
@@ -61,6 +62,7 @@ public class ReviewDAO {
             updatedReview.setVideogameTitle(reviewUpdated.getVideogameTitle());
             updatedReview.setRating(reviewUpdated.getRating());
             updatedReview.setComment(reviewUpdated.getComment());
+            updatedReview.setLikes(reviewUpdated.getLikes());
             mongoTemplate.save(updatedReview);
             return Optional.of(updatedReview);
         }

@@ -20,15 +20,18 @@ public class ReviewEntity {
     private int rating;
     @Field(name = "comment")
     private String comment;
+    @Field(name = "likes")
+    private int likes;
 
     public ReviewEntity() {}
 
-    public ReviewEntity(String username, String videogameTitle, int rating, String comment) {
+    public ReviewEntity(String username, String videogameTitle, int rating, String comment, int likes) {
         super();
         this.username = username;
         this.videogameTitle = videogameTitle;
         this.rating = rating;
         this.comment = comment;
+        this.likes = likes;
     }
 
     public ReviewEntity(ReviewEntity review) {
@@ -36,6 +39,7 @@ public class ReviewEntity {
         this.videogameTitle = review.getVideogameTitle();
         this.rating = review.getRating();
         this.comment = review.getComment();
+        this.likes = review.getLikes();
     }
 
     public ReviewEntity(ReviewDTO reviewDTO) {
@@ -43,6 +47,7 @@ public class ReviewEntity {
         this.videogameTitle = reviewDTO.getVideogameDTO().getTitle();
         this.rating = reviewDTO.getRating();
         this.comment = reviewDTO.getComment();
+        this.likes = reviewDTO.getLikes();
     }
 
     public String getId() { return id; }
@@ -59,6 +64,11 @@ public class ReviewEntity {
     
     public String getComment() { return comment; }
     public void setComment(String comment) { this.comment = comment; }
+
+    public int getLikes() { return likes; }
+    public void setLikes(int likes) { this.likes = likes; }
+    
+    public void incrementLikes() { this.likes += 1; }
 
 
 }

@@ -2,6 +2,7 @@ package com.myvg.myvg.Services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Comparator;
 
 import com.myvg.myvg.DAO.ReviewDAO;
 import com.myvg.myvg.DAO.UserDAO;
@@ -104,5 +105,22 @@ public class ReviewService {
         }
         
         return reviewDAO.update(reviewUpdated);
+    }
+
+    public Optional<ReviewEntity> likeReview(String Id, String userId) {
+        Optional<ReviewEntity> reviewOptional = reviewDAO.findById(Id);
+        if (reviewOptional.isPresent()) {
+            ReviewEntity review = reviewOptional.get();
+            review.incrementLikes();
+            return reviewDAO.update(review);
+        } else {
+            throw new IllegalArgumentException("Review not found");
+        }
+    }
+
+    public List<ReviewEntity> getAllReviewsSortedByLikes() {
+        List<ReviewEntity> reviews = reviewDAO.findAll();
+        reviews.sort(Comparator.comparingInt(ReviewEntity::getLikes).reversed());
+        return reviews;
     }
 }

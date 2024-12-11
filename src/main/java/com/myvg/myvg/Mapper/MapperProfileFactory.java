@@ -29,7 +29,7 @@ public class MapperProfileFactory {
             case VIDEOGAME:
                 return new MapperProfile() {{
                     setMappers(List.of(
-                        new Mapper<VideogameDTO, VideogameEntity>() {{
+                        new Mapper<VideogameDTO, VideogameEntity>(VideogameDTO.class, VideogameEntity.class) {{
                             setExpressions(List.of(
                                 (source, destination) -> destination.setId(source.getId()),
                                 (source, destination) -> destination.setTitle(source.getTitle()),
@@ -39,7 +39,7 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setReviews(source.getReviews())
                             ));
                         }},
-                        new Mapper<VideogameEntity, VideogameDTO>() {{
+                        new Mapper<VideogameEntity, VideogameDTO>(VideogameEntity.class, VideogameDTO.class) {{
                             setExpressions(List.of(
                                 (source, destination) -> destination.setId(source.getId()),
                                 (source, destination) -> destination.setTitle(source.getTitle()),
@@ -54,7 +54,7 @@ public class MapperProfileFactory {
             case USER:
                 return new MapperProfile() {{
                     setMappers(List.of(
-                        new Mapper<UserDTO, UserEntity>() {{
+                        new Mapper<UserDTO, UserEntity>(UserDTO.class, UserEntity.class) {{
                             setExpressions(List.of(
                                 (source, destination) -> destination.setId(source.getId()),
                                 (source, destination) -> destination.setUsername(source.getUsername()),
@@ -65,7 +65,7 @@ public class MapperProfileFactory {
                                     .collect(Collectors.toList()))
                             ));
                         }},
-                        new Mapper<UserEntity, UserDTO>() {{
+                        new Mapper<UserEntity, UserDTO>(UserEntity.class, UserDTO.class) {{
                             setExpressions(List.of(
                                 (source, destination) -> destination.setId(source.getId()),
                                 (source, destination) -> destination.setUsername(source.getUsername()),
@@ -81,7 +81,7 @@ public class MapperProfileFactory {
             case REVIEW:
                 return new MapperProfile() {{
                     setMappers(List.of(
-                        new Mapper<ReviewDTO, ReviewEntity>() {{
+                        new Mapper<ReviewDTO, ReviewEntity>(ReviewDTO.class, ReviewEntity.class) {{
                             setExpressions(List.of(
                                 (source, destination) -> destination.setId(source.getId()),
                                 (source, destination) -> destination.setUsername(source.getUserDTO().getUsername()),
@@ -90,7 +90,7 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setComment(source.getComment())
                             ));
                         }},
-                        new Mapper<ReviewEntity, ReviewDTO>() {{
+                        new Mapper<ReviewEntity, ReviewDTO>(ReviewEntity.class, ReviewDTO.class) {{
                             setExpressions(List.of(
                                 (source, destination) -> destination.setId(source.getId()),
                                 (source, destination) -> destination.setRating(source.getRating()),

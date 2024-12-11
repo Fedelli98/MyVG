@@ -10,8 +10,8 @@ public class MapperProfile{
     @SuppressWarnings("unchecked")
     public <TSource, TDestination> TDestination map(TSource source, TDestination destination)
     {
-        for (IMapperBase mapper : mappers) {
-            if ((IMapper<TSource, TDestination>) mapper instanceof IMapper<TSource, TDestination>) {
+        for (IMapper<?, ?> mapper : mappers) {
+            if (mapper.getSourceType().isAssignableFrom(source.getClass()) && mapper.getDestinationType().isAssignableFrom(destination.getClass())) {
                 var mapToUse = (IMapper<TSource, TDestination>) mapper;
                 return mapToUse.map(source, destination);
             }

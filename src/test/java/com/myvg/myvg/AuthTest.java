@@ -30,6 +30,14 @@ public class AuthTest {
     //             new ReviewDTO("Test Review 4", 2, "Test Comment 4", "testUser")
     //         ))
     //     )));
+    //TEST per l'aggiunta di un videogioco tramite mapper
+/*  VideogameDTO videogameDTO = new VideogameDTO();
+    videogameDTO.setTitle("MapTest");
+    videogameDTO.setGenre("Platform");
+    videogameDTO.setReleaseYear(1985);
+    videogameDTO.setPlatform(List.of("potta"));
+    videogameDTO.setReviews(new ArrayList<>());
+    videogameService.createVideoGame(videogameDTO);   */  
     // }
 
     // @AfterEach
