@@ -16,7 +16,13 @@ import org.springframework.context.ApplicationContext;
 import com.myvg.myvg.Services.SceneService;
 import com.myvg.myvg.DAO.VideogameDAO;
 import com.myvg.myvg.DTO.VideogameDTO;
+import com.myvg.myvg.Mapper.MapperProfile;
+import com.myvg.myvg.Mapper.MapperProfileFactory;
 import com.myvg.myvg.Services.AppContext;
+
+
+
+
 
 @Controller
 public class VideogameSearchController 
@@ -34,6 +40,8 @@ public class VideogameSearchController
     private FlowPane gamesContainer;
 
     private List<VideogameDTO> gamesToDisplay = new ArrayList<>();
+
+    private final MapperProfile mapperVideogame = MapperProfileFactory.createMapperProfile(MapperProfileFactory.MapperProfileEnum.VIDEOGAME);
     
     @FXML
     private void onBack() 
@@ -58,26 +66,26 @@ public class VideogameSearchController
 
         gamesToDisplay.addAll(videogameDAO.findByTitle(query)
             .stream()
-            .map(VideogameDTO::new)
+            .map(videogameEntity -> mapperVideogame.map(videogameEntity, new VideogameDTO()))
             .collect(Collectors.toList()));
 
             gamesToDisplay.addAll(videogameDAO.findByGenre(query)
             .stream()
-            .map(VideogameDTO::new)
+            .map(videogameEntity -> mapperVideogame.map(videogameEntity, new VideogameDTO()))
             .collect(Collectors.toList()));
 
             gamesToDisplay.addAll(videogameDAO.findByPlatform(query)
             .stream()
-            .map(VideogameDTO::new)
+            .map(videogameEntity -> mapperVideogame.map(videogameEntity, new VideogameDTO()))
             .collect(Collectors.toList()));
 
             if(query == "")
             {
                 gamesToDisplay.clear();
                 gamesToDisplay.addAll(videogameDAO.findAll()
-                .stream()
-                .map(VideogameDTO::new)
-                .collect(Collectors.toList()));
+                    .stream()
+                    .map(videogameEntity -> mapperVideogame.map(videogameEntity, new VideogameDTO()))
+                    .collect(Collectors.toList()));
             }
             
         AppContext.getInstance().setCurrentQuery(gamesToDisplay);

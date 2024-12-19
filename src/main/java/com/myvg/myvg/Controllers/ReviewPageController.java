@@ -9,11 +9,16 @@ import org.springframework.stereotype.Controller;
 
 import com.myvg.myvg.Services.VideogameService;
 import com.myvg.myvg.DTO.VideogameDTO;
+import com.myvg.myvg.EntityModel.ReviewEntity;
+import com.myvg.myvg.Mapper.MapperProfile;
+import com.myvg.myvg.Mapper.MapperProfileFactory;
 import com.myvg.myvg.DTO.ReviewDTO;
 import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.Services.AppContext;
 import com.myvg.myvg.Services.ReviewService;
 import com.myvg.myvg.Services.SceneService;
+import com.myvg.myvg.Mapper.MapperProfileFactory.MapperProfileEnum;
+
 import java.util.ArrayList;
 
 @Controller
@@ -35,6 +40,8 @@ public class ReviewPageController {
 
     private UserDTO userDTO; // This should be set when user logs in
     private VideogameDTO videogameDTO; // This should be set when review page is opened for a specific game
+
+    private final MapperProfile mapperReview = MapperProfileFactory.createMapperProfile(MapperProfileEnum.REVIEW);
 
     public void setGameContext() {
         videogameDTO = AppContext.getInstance().getCurrentVideogame();
@@ -58,12 +65,12 @@ public class ReviewPageController {
 
         // Save to database
         try {
-            reviewService.postReview(new ReviewDTO(this.userDTO, this.videogameDTO, rating, comment.trim(),0));
+            reviewService.postReview(new ReviewDTO(this.userDTO.getUsername(), this.videogameDTO.getTitle(), rating, comment.trim(),0));
 
             //update videogameDTO with new vgDTO revied
             videogameService.findGameById(this.videogameDTO.getId())
             .ifPresent(vgEntity -> {
-                this.videogameDTO = new VideogameDTO(vgEntity);
+                this.videogameDTO = mapperReview.map(vgEntity, new VideogameDTO());
             });
 
             //update AppContext current Videogame and update queryList

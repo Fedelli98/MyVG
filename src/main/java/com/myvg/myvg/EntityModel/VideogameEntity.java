@@ -37,15 +37,6 @@ public class VideogameEntity {
         this.reviews = reviews;
     }
 
-    public VideogameEntity(VideogameDTO videogameDTO) {
-        super();
-        this.title = videogameDTO.getTitle();
-        this.genre = videogameDTO.getGenre();
-        this.releaseYear = videogameDTO.getReleaseYear();
-        this.platform = videogameDTO.getPlatform();
-        this.reviews = videogameDTO.getReviews();
-    }
-
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

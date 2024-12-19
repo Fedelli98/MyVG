@@ -101,11 +101,11 @@ public class VideogameService {
         videogameDAO.delete(id);
     }
 
-    public void addToWishlist(String userId, VideogameDTO game) {
+    public void addToWishlist(String userId, VideogameDTO videogameDTO) {
         userDAO.findById(userId).ifPresent(user -> {
-            VideogameEntity gameEntity = new VideogameEntity(game);
-            if (!user.getWishlist().contains(gameEntity)) {
-                user.getWishlist().add(gameEntity);
+            VideogameEntity videogameEntity = mapperProfile.map(videogameDTO, new VideogameEntity());
+            if (!user.getWishlist().contains(videogameEntity)) {
+                user.getWishlist().add(videogameEntity);
                 userDAO.update(user);
             }
         });

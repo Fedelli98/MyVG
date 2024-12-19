@@ -4,6 +4,9 @@ import com.myvg.myvg.DAO.UserDAO;
 import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.DTO.VideogameDTO;
 import com.myvg.myvg.EntityModel.UserEntity;
+import com.myvg.myvg.Mapper.MapperProfile;
+import com.myvg.myvg.Mapper.MapperProfileFactory;
+import com.myvg.myvg.Mapper.MapperProfileFactory.MapperProfileEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +23,8 @@ public class UserService {
 
     @Autowired
     private UserDAO userDAO;
+
+    private final MapperProfile mapperUser = MapperProfileFactory.createMapperProfile(MapperProfileEnum.USER);
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -41,19 +46,25 @@ public class UserService {
     }
 
     public UserDTO getUserById(String id) {
-        Optional<UserEntity> user = userDAO.findById(id);
-        if (user.isPresent()) {
-            return new UserDTO(user.get());
+        Optional<UserEntity> res = userDAO.findById(id);
+        if (res.isPresent()) {
+            return mapperUser.map(res.get(), new UserDTO());
         }
         return null;
     }
 
     public UserDTO getUserByUsername(String username) {
-        Optional<UserEntity> user = userDAO.findUserByUsername(username);
-        if (user.isPresent()) {
-            return new UserDTO(user.get());
+        Optional<UserEntity> res = userDAO.findUserByUsername(username);
+        if (res.isPresent()) {
+            return mapperUser.map(res.get(), new UserDTO());
         }
         return null;
+    }
+
+    public void removeUser(String username, String password) {
+        if (loginUser(username, password)) {
+            userDAO.findUserByUsername(username).ifPresent(user -> userDAO.delete(user.getId()));
+        }
     }
 
     public UserDTO updateAvatarID(String username, int avatarID) {
@@ -62,11 +73,7 @@ public class UserService {
     }
 
     public List<VideogameDTO> getWishlist(String userId) {
-        return userDAO.findById(userId)
-            .map(user -> user.getWishlist().stream()
-                .map(VideogameDTO::new)
-                .collect(Collectors.toList()))
-            .orElse(new ArrayList<>());
+        return mapperUser.map(userDAO.findById(userId), new UserDTO()).getWishlist();
     }
 
     public void removeFromWishlist(String userId, VideogameDTO videogame) {

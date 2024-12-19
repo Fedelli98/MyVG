@@ -1,8 +1,6 @@
 package com.myvg.myvg.DTO;
-
-import com.myvg.myvg.EntityModel.UserEntity;    
 import java.util.List;
-import java.util.stream.Collectors;
+
 public class UserDTO {
     private String id;
     private String username;
@@ -10,22 +8,13 @@ public class UserDTO {
     private int avatarID;
     private List<VideogameDTO> wishlist;
 
-
+    public UserDTO() {}
+    
     public UserDTO(String username, String email, int avatarID, List<VideogameDTO> wishlist) {
         this.username = username;
         this.email = email;
         this.avatarID = avatarID;
         this.wishlist = wishlist;
-    }
-
-    public UserDTO(UserEntity userEntity) {
-        this.id = userEntity.getId();
-        this.username = userEntity.getUsername();
-        this.email = userEntity.getEmail();
-        this.avatarID = userEntity.getAvatarId();
-        this.wishlist = userEntity.getWishlist().stream()
-            .map(VideogameDTO::new)
-            .collect(Collectors.toList());
     }
 
     public String getId() { return id; }

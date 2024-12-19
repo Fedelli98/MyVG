@@ -49,4 +49,10 @@ public class UserDAO {
         mongoTemplate.save(user);
         return Optional.ofNullable(user);
     }
+
+    public void delete(String id) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(id));
+        mongoTemplate.remove(query, UserEntity.class);
+    }
 }

@@ -42,14 +42,6 @@ public class ReviewEntity {
         this.likes = review.getLikes();
     }
 
-    public ReviewEntity(ReviewDTO reviewDTO) {
-        this.username = reviewDTO.getUserDTO().getUsername();
-        this.videogameTitle = reviewDTO.getVideogameDTO().getTitle();
-        this.rating = reviewDTO.getRating();
-        this.comment = reviewDTO.getComment();
-        this.likes = reviewDTO.getLikes();
-    }
-
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

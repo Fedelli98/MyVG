@@ -136,23 +136,23 @@ public class VideogamePageController {
             reviewContainer.getChildren().clear();
             if (videogameDTO.getReviews() != null) {
                 System.out.println(videogameDTO.getReviews().size());
-                for (ReviewEntity review : videogameDTO.getReviews()) {
+                for (ReviewDTO reviewDTO : videogameDTO.getReviews()) {
                     VBox reviewBox = new VBox(5);
                     reviewBox.setStyle("-fx-padding: 10; -fx-background-color: #f8f8f8; -fx-background-radius: 5;");
                     
-                    Text usernameText = new Text(review.getUsername());
+                    Text usernameText = new Text(reviewDTO.getUsername());
                     usernameText.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
                     
-                    Text reviewText = new Text(review.getComment());
+                    Text reviewText = new Text(reviewDTO.getComment());
                     reviewText.setWrappingWidth(400);
                     
-                    Text scoreText = new Text("Score: " + review.getRating() + "/10");
+                    Text scoreText = new Text("Score: " + reviewDTO.getRating() + "/10");
                     scoreText.setStyle("-fx-font-weight: bold;");
                     
-                    Text likesText = new Text("Likes: " + review.getLikes());
+                    Text likesText = new Text("Likes: " + reviewDTO.getLikes());
                     
                     ToggleButton likeButton = new ToggleButton("Like");
-                    likeButton.setOnAction(e -> handleLikeReview(review.getId()));
+                    likeButton.setOnAction(e -> handleLikeReview(reviewDTO.getId()));
                     
                     reviewBox.getChildren().addAll(usernameText, scoreText, reviewText, likesText, likeButton);
                     reviewContainer.getChildren().add(reviewBox);

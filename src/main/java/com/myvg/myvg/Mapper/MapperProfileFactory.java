@@ -27,6 +27,9 @@ public class MapperProfileFactory {
     public static MapperProfile createMapperProfile(MapperProfileEnum profile) {
         switch (profile) {
             case VIDEOGAME:
+
+            var mapperReview = MapperProfileFactory.createMapperProfile(MapperProfileFactory.MapperProfileEnum.REVIEW);
+            
                 return new MapperProfile() {{
                     setMappers(List.of(
                         new Mapper<VideogameDTO, VideogameEntity>(VideogameDTO.class, VideogameEntity.class) {{
@@ -36,7 +39,9 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setGenre(source.getGenre()),
                                 (source, destination) -> destination.setReleaseYear(source.getReleaseYear()),
                                 (source, destination) -> destination.setPlatform(source.getPlatform()),
-                                (source, destination) -> destination.setReviews(source.getReviews())
+                                (source, destination) -> destination.setReviews(source.getReviews().stream()
+                                .map(reviewDTO -> mapperReview.map(reviewDTO, new ReviewEntity()))
+                                .collect(Collectors.toList()))
                             ));
                         }},
                         new Mapper<VideogameEntity, VideogameDTO>(VideogameEntity.class, VideogameDTO.class) {{
@@ -46,12 +51,17 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setGenre(source.getGenre()),
                                 (source, destination) -> destination.setReleaseYear(source.getReleaseYear()),
                                 (source, destination) -> destination.setPlatform(source.getPlatform()),
-                                (source, destination) -> destination.setReviews(source.getReviews())
+                                (source, destination) -> destination.setReviews(source.getReviews().stream()
+                                    .map(reviewEntity -> mapperReview.map(reviewEntity, new ReviewDTO()))
+                                    .collect(Collectors.toList()))
                             ));
                         }}
                     ));
                 }};
             case USER:
+
+            var mapperVideogame = MapperProfileFactory.createMapperProfile(MapperProfileFactory.MapperProfileEnum.VIDEOGAME);
+
                 return new MapperProfile() {{
                     setMappers(List.of(
                         new Mapper<UserDTO, UserEntity>(UserDTO.class, UserEntity.class) {{
@@ -61,7 +71,7 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setEmail(source.getEmail()),
                                 (source, destination) -> destination.setAvatarId(source.getAvatarID()),
                                 (source, destination) -> destination.setWishlist(source.getWishlist().stream()
-                                    .map(VideogameEntity::new)
+                                    .map(videogameDTO -> mapperVideogame.map(videogameDTO, new VideogameEntity()))
                                     .collect(Collectors.toList()))
                             ));
                         }},
@@ -72,7 +82,7 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setEmail(source.getEmail()),
                                 (source, destination) -> destination.setAvatarID(source.getAvatarId()),
                                 (source, destination) -> destination.setWishlist(source.getWishlist().stream()
-                                    .map(VideogameDTO::new)
+                                    .map(videogameEntity -> mapperVideogame.map(videogameEntity, new VideogameDTO()))
                                     .collect(Collectors.toList()))
                             ));
                         }}
@@ -84,8 +94,8 @@ public class MapperProfileFactory {
                         new Mapper<ReviewDTO, ReviewEntity>(ReviewDTO.class, ReviewEntity.class) {{
                             setExpressions(List.of(
                                 (source, destination) -> destination.setId(source.getId()),
-                                (source, destination) -> destination.setUsername(source.getUserDTO().getUsername()),
-                                (source, destination) -> destination.setVideogameTitle(source.getVideogameDTO().getTitle()),
+                                (source, destination) -> destination.setUsername(source.getUsername()),
+                                (source, destination) -> destination.setVideogameTitle(source.getVideogameTitle()),
                                 (source, destination) -> destination.setRating(source.getRating()),
                                 (source, destination) -> destination.setComment(source.getComment())
                             ));
@@ -95,8 +105,8 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setId(source.getId()),
                                 (source, destination) -> destination.setRating(source.getRating()),
                                 (source, destination) -> destination.setComment(source.getComment()),
-                                (source, destination) -> destination.setUserDTO(AppContext.getInstance().getCurrentUser()),
-                                (source, destination) -> destination.setVideogameDTO(AppContext.getInstance().getCurrentVideogame())
+                                (source, destination) -> destination.setUsername(source.getUsername()),
+                                (source, destination) -> destination.setVideogameTitle(source.getVideogameTitle())
                             ));
                         }}
                     ));

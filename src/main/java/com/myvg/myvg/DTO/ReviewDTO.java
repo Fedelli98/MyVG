@@ -3,8 +3,8 @@ package com.myvg.myvg.DTO;
 
 public class ReviewDTO {
     private String id;
-    private UserDTO userDTO;
-    private VideogameDTO videogameDTO;
+    private String username;
+    private String videogame;
 
     private int rating;
     private String comment;
@@ -12,10 +12,10 @@ public class ReviewDTO {
 
     public ReviewDTO() {}
 
-    public ReviewDTO(UserDTO userDTO, VideogameDTO videogameDTO, int rating, String comment,  int likes) {
+    public ReviewDTO(String username, String videogame, int rating, String comment,  int likes) {
 
-        this.userDTO = userDTO;
-        this.videogameDTO = videogameDTO;
+        this.username = username;
+        this.videogame = videogame;
         this.rating = rating;
         this.comment = comment;
         this.likes = likes;
@@ -24,11 +24,11 @@ public class ReviewDTO {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    public UserDTO getUserDTO() { return userDTO; }
-    public void setUserDTO(UserDTO userDTO) { this.userDTO = userDTO; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public VideogameDTO getVideogameDTO() { return videogameDTO; }
-    public void setVideogameDTO(VideogameDTO videogameDTO) { this.videogameDTO = videogameDTO; }
+    public String getVideogameTitle() { return videogame; }
+    public void setVideogameTitle(String videogame) { this.videogame = videogame; }
 
     public int getRating() { return rating; }
     public void setRating(int rating) { this.rating = rating; }

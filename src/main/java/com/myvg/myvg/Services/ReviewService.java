@@ -10,7 +10,13 @@ import com.myvg.myvg.DAO.VideogameDAO;
 import com.myvg.myvg.EntityModel.ReviewEntity;
 import com.myvg.myvg.EntityModel.UserEntity;
 import com.myvg.myvg.EntityModel.VideogameEntity;
+import com.myvg.myvg.Mapper.Mapper;
+import com.myvg.myvg.Mapper.MapperProfileFactory;
+import com.myvg.myvg.Mapper.MapperProfileFactory.MapperProfileEnum;
+import com.myvg.myvg.Mapper.MapperProfile;
 import com.myvg.myvg.DTO.ReviewDTO;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 //IT'S REVIEW SERVICE RESPONSABILITY TO UPDATES THE REFERENCES 
@@ -25,6 +31,8 @@ public class ReviewService {
     private final UserDAO userDAO;
     private final VideogameDAO videogameDAO;
 
+    private final MapperProfile mapperReview = MapperProfileFactory.createMapperProfile(MapperProfileEnum.REVIEW);
+
     public ReviewService(ReviewDAO reviewDAO, UserDAO userDAO, VideogameDAO videogameDAO) {
         this.reviewDAO = reviewDAO;
         this.userDAO = userDAO;
@@ -33,9 +41,9 @@ public class ReviewService {
 
     public ReviewEntity postReview(ReviewDTO reviewDTO) {
         if (validateReviewDTO(reviewDTO)) {
-            ReviewEntity reviewEntity = reviewDAO.create(new ReviewEntity(reviewDTO));
+            ReviewEntity reviewEntity = reviewDAO.create(mapperReview.map(reviewDTO, new ReviewEntity()));
 
-            videogameDAO.findById(reviewDTO.getVideogameDTO().getId())
+            videogameDAO.findByTitle(reviewDTO.getVideogameTitle())
                 .ifPresent(vgEntity -> {
                     vgEntity.getReviews().add(reviewEntity);
                     videogameDAO.update(vgEntity);
@@ -51,11 +59,11 @@ public class ReviewService {
             throw new IllegalArgumentException("Review cannot be null");
         }
 
-        if (reviewDTO.getUserDTO() == null || reviewDTO.getUserDTO().getId() == null) {
+        if (reviewDTO.getUsername() == null || reviewDTO.getUsername() == null) {
             throw new IllegalArgumentException("User information is required");
         }
 
-        if (reviewDTO.getVideogameDTO() == null || reviewDTO.getVideogameDTO().getId() == null) {
+        if (reviewDTO.getVideogameTitle() == null || reviewDTO.getVideogameTitle() == null) {
             throw new IllegalArgumentException("Videogame information is required");
         }
 

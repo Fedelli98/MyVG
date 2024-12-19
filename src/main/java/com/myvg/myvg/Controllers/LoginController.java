@@ -37,14 +37,15 @@ public class LoginController {
     @Autowired
     private SceneService sceneService;
 
-    @Autowired
-    private VideogameService videogameService;
-
     @FXML
     public void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        login(username, password);
+    }
+
+    public void login(String username, String password) {
         if (userService.loginUser(username, password)) 
         {
             UserDTO user = userService.getUserByUsername(username);
@@ -67,7 +68,11 @@ public class LoginController {
         String username = registerUsernameField.getText();
         String password = registerPasswordField.getText();
         String email = emailField.getText();
-        
+
+        register(username, password, email);
+    }
+
+    public void register(String username, String password, String email) {
         if (username == "" && password == "" && email == "") {
             sceneService.showAlert("Registration Failed", "Please fill in all fields.");
             return;
