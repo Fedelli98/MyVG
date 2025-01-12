@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import com.myvg.myvg.Services.UserService;
@@ -18,7 +19,7 @@ import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.DTO.VideogameDTO;
 
 
-@Controller
+@Component
 public class LoginController {
     @FXML
     private TextField usernameField;
@@ -45,7 +46,7 @@ public class LoginController {
         login(username, password);
     }
 
-    public void login(String username, String password) {
+    public boolean login(String username, String password) {
         if (userService.loginUser(username, password)) 
         {
             UserDTO user = userService.getUserByUsername(username);
@@ -55,10 +56,13 @@ public class LoginController {
             {
                 controller.setUser();
             });
+
+            return true;
         } 
         else 
         {
             sceneService.showAlert("Login Failed", "Invalid username or password.");
+            return false;
         }
     }
 

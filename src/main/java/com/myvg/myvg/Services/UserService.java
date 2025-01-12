@@ -61,7 +61,7 @@ public class UserService {
         return null;
     }
 
-    public void removeUser(String username, String password) {
+    public void deleteUser(String username, String password) {
         if (loginUser(username, password)) {
             userDAO.findUserByUsername(username).ifPresent(user -> userDAO.delete(user.getId()));
         }

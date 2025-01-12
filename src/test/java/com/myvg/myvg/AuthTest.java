@@ -10,9 +10,17 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.test.web.servlet.MockMvc;
-//import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.DTO.VideogameDTO;
@@ -23,41 +31,46 @@ import com.myvg.myvg.Services.AppContext;
 import com.myvg.myvg.Services.UserService;
 import com.myvg.myvg.EntityModel.UserEntity;
 
-//@SpringBootTest
+@SpringBootTest
 public class AuthTest {
+
     @Autowired
     private UserService userService;
 
     @Autowired
-    private UserDAO userDAO;
-
-    @Autowired
-    private AppContext appContext;
+    private LoginController loginController;
 
     private UserDTO testUser;
-    private UserEntity usrEnt;
 
     @BeforeEach
     public void setUp() {
-        testUser = new UserDTO("Muccarini", "example@gmail.com", 0, null);
+        testUser = new UserDTO("Example", "example@gmail.com", 0, null);
     }
 
+    //FUNCTIONAL TEST
     @Test
-    public void testHandleRegister() throws Exception {
-        userService.registerUser(testUser.getUsername(), "password", testUser.getEmail(), testUser.getAvatarID());
+    public void testLogin() throws Exception {
+        
+        //userService.registerUser(testUser.getUsername(), "password", testUser.getEmail(), testUser.getAvatarID());
 
-        // Check the database for the user
-        UserDTO registeredUser = userService.getUserByUsername("Muccarini");
+        loginController.register(testUser.getUsername(), "password", testUser.getEmail());
+        //loginController.login("Example", "password"); throw exception on switch scene afte login
+
+        //functional test
+        assertEquals(loginController, AppContext.getInstance().getCurrentUser());
+
+        //integration test
+        UserDTO registeredUser = userService.getUserByUsername("Example");
         assertNotNull(registeredUser);
-        assertEquals("Muccarini", registeredUser.getUsername());
+        assertEquals("Example", registeredUser.getUsername());
 
-        userService.loginUser("Muccarini", "password");
-        assertEquals("Muccarini", appContext.getCurrentUser().getUsername());
     }
 
-    // @AfterEach
-    // public void tearDown() {
-    //     userDAO.delete(usrEnt);
-    //     assertNull(AppContext.currentUser());
-    // }
+    //INTEGRATION TEST
+
+    @AfterEach
+    public void tearDown() {
+        userService.deleteUser("Example", "password");
+        assertNull(AppContext.getInstance().getCurrentUser());
+    }
 }

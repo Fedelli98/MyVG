@@ -6,7 +6,9 @@ import com.myvg.myvg.DTO.VideogameDTO;
 import java.util.List;
 import java.util.ArrayList;
 
-@Service
+//add service scope singleton? and remove the static methods
+//or keep the singleton old way
+//@Service
 public class AppContext {
     private static AppContext instance;
     private UserDTO currentUser;
