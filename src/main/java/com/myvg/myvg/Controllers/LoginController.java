@@ -43,7 +43,13 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        login(username, password);
+        if(login(username, password) == true){
+            sceneService.switchScene("/fxml/UserPage.fxml", 
+            (UserPageController controller) -> 
+            {
+                controller.setUser();
+            });
+        }
     }
 
     public boolean login(String username, String password) {
@@ -51,12 +57,6 @@ public class LoginController {
         {
             UserDTO user = userService.getUserByUsername(username);
             AppContext.getInstance().setCurrentUser(user);
-            sceneService.switchScene("/fxml/UserPage.fxml", 
-            (UserPageController controller) -> 
-            {
-                controller.setUser();
-            });
-
             return true;
         } 
         else 
