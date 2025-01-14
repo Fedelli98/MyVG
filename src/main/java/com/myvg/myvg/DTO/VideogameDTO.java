@@ -41,6 +41,7 @@ public class VideogameDTO {
     public void setReviews(List<ReviewDTO> reviews) { this.reviews = reviews; }
 
     public void setVideogameCoverPath(String imagePath) { this.videogameCoverPath = imagePath; }
+    public void setVideogameCoverPath() { this.videogameCoverPath = retrieveImagePath(title); }
     public String getVideogameCoverPath(){ return videogameCoverPath; }
 
     private String retrieveImagePath(String title) {

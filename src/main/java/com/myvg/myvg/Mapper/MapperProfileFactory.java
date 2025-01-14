@@ -51,6 +51,7 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setGenre(source.getGenre()),
                                 (source, destination) -> destination.setReleaseYear(source.getReleaseYear()),
                                 (source, destination) -> destination.setPlatform(source.getPlatform()),
+                                (source, destination) -> destination.setVideogameCoverPath(),
                                 (source, destination) -> destination.setReviews(source.getReviews().stream()
                                     .map(reviewEntity -> mapperReview.map(reviewEntity, new ReviewDTO()))
                                     .collect(Collectors.toList()))

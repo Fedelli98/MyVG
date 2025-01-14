@@ -2,6 +2,7 @@ package com.myvg.myvg.Services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 import com.myvg.myvg.DAO.ReviewDAO;
@@ -39,19 +40,41 @@ public class ReviewService {
         this.videogameDAO = videogameDAO;
     }
 
-    public ReviewEntity postReview(ReviewDTO reviewDTO) {
-        if (validateReviewDTO(reviewDTO)) {
-            ReviewEntity reviewEntity = reviewDAO.create(mapperReview.map(reviewDTO, new ReviewEntity()));
+    public boolean postReview(ReviewDTO reviewDTO) {
+        if (validateReviewDTO(reviewDTO)) 
+        {
+            //get user
+            var user = userDAO.readUserByUsername(reviewDTO.getUsername());
+            if(user.isEmpty()) return false;
 
-            videogameDAO.findByTitle(reviewDTO.getVideogameTitle())
+            //get videogame
+            var videogame = videogameDAO.readByTitle(reviewDTO.getVideogameTitle());
+            if(videogame.isEmpty()) return false;
+
+            //check if user already posted a review
+            for(var review : videogame.get().getReviews())
+            {
+                if(review.getUsername().equals(reviewDTO.getUsername()))
+                {
+                    return false;
+                }
+            }
+
+            //insert review
+            Optional<ReviewEntity> reviewPosted = reviewDAO.create(mapperReview.map(reviewDTO, new ReviewEntity()));
+            if(!reviewPosted.isPresent()) 
+            {
+                //update videogame
+                videogameDAO.readByTitle(reviewPosted.get().getVideogameTitle())
                 .ifPresent(vgEntity -> {
-                    vgEntity.getReviews().add(reviewEntity);
+                    vgEntity.getReviews().add(reviewPosted.get());
                     videogameDAO.update(vgEntity);
                 });
-
-            return reviewEntity;
+                
+                return true;
+            }
         }
-        return null;
+        return false;
     }
 
     private boolean validateReviewDTO(ReviewDTO reviewDTO) {
@@ -78,45 +101,62 @@ public class ReviewService {
         return true;
     }
 
-    public List<ReviewEntity> getReviewsByUser(String userId) {
-        Optional<UserEntity> user = userDAO.findById(userId);
+    public List<ReviewDTO> getReviewsByUserId(String userId) {
+        Optional<UserEntity> user = userDAO.read(userId);
         if (user.isPresent()) {
-            return reviewDAO.findByUser(user.get());
+            var reviews = new ArrayList<ReviewDTO>();
+            for(ReviewEntity review : reviewDAO.readByUser(user.get().getUsername()))
+            {
+                reviews.add(mapperReview.map(review, new ReviewDTO()));
+            }
+            return reviews;
         }
         return List.of();
     }
 
-    public List<ReviewEntity> getReviewsByVideogame(String videogameId) {
-        Optional<VideogameEntity> videogame = videogameDAO.findById(videogameId);
+    public List<ReviewEntity> getReviewsByVideogameId(String videogameId) {
+        Optional<VideogameEntity> videogame = videogameDAO.read(videogameId);
         if (videogame.isPresent()) {
-            return reviewDAO.findByVideogame(videogame.get());
+            return reviewDAO.readByVideogame(videogame.get().getTitle());
         }
         return List.of();
     }
 
     public Optional<ReviewEntity> getReviewById(String id) {
-        return reviewDAO.findById(id);
+        return reviewDAO.read(id);
     }
 
     public List<ReviewEntity> getAllReviews() {
-        return reviewDAO.findAll();
+        return reviewDAO.readAll();
     }
 
-    public void deleteReview(String id) {
-        reviewDAO.delete(id);
+    public void removeReview(String id) {
+        getReviewById(id).ifPresent(reviewEntity -> 
+        {
+            //update videogame
+            videogameDAO.readByTitle(reviewEntity.getVideogameTitle())
+                .ifPresent(vgEntity -> {
+                    vgEntity.getReviews().remove(reviewEntity);
+                    videogameDAO.update(vgEntity);
+                });
+
+            //update review
+            reviewDAO.delete(id);
+        });
     }
 
-    public Optional<ReviewEntity> updateReview(String id, ReviewEntity reviewUpdated) {
+    public boolean update(ReviewDTO reviewUpdated) {
         // Validate rating is between 1-5
         if (reviewUpdated.getRating() < 1 || reviewUpdated.getRating() > 5) {
             throw new IllegalArgumentException("Rating must be between 1 and 5");
         }
-        
-        return reviewDAO.update(reviewUpdated);
+
+        var reviewEntity = mapperReview.map(reviewUpdated, new ReviewEntity());
+        return reviewDAO.update(reviewEntity);
     }
 
-    public Optional<ReviewEntity> likeReview(String Id, String userId) {
-        Optional<ReviewEntity> reviewOptional = reviewDAO.findById(Id);
+    public boolean likeReview(String Id, String userId) {
+        Optional<ReviewEntity> reviewOptional = reviewDAO.read(Id);
         if (reviewOptional.isPresent()) {
             ReviewEntity review = reviewOptional.get();
             review.incrementLikes();
@@ -127,7 +167,7 @@ public class ReviewService {
     }
 
     public List<ReviewEntity> getAllReviewsSortedByLikes() {
-        List<ReviewEntity> reviews = reviewDAO.findAll();
+        List<ReviewEntity> reviews = reviewDAO.readAll();
         reviews.sort(Comparator.comparingInt(ReviewEntity::getLikes).reversed());
         return reviews;
     }

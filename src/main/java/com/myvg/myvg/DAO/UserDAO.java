@@ -1,5 +1,6 @@
 package com.myvg.myvg.DAO;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.myvg.myvg.EntityModel.ReviewEntity;
 import com.myvg.myvg.EntityModel.UserEntity;
 
 @Repository
-public class UserDAO {
+public class UserDAO implements IDAO<UserEntity> {
     @Autowired
     private final MongoTemplate mongoTemplate;
 
@@ -19,18 +21,44 @@ public class UserDAO {
         this.mongoTemplate = mT;
     }
 
-    public void create(UserEntity userEntity) {
-        mongoTemplate.save(userEntity);
+    public Optional<UserEntity> create(UserEntity userEntity) {
+        return Optional.ofNullable(mongoTemplate.save(userEntity));
+    }
+
+    public Optional<UserEntity> read(String id) {
+        return Optional.ofNullable(mongoTemplate.findById(id, UserEntity.class));
+    }
+
+    public boolean update(UserEntity userUpdated) {
+        Optional<UserEntity> reviewDB = read(userUpdated.getId());
+        if (reviewDB.isPresent()) {
+            mongoTemplate.save(userUpdated);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean delete(String id) {
+        Optional<UserEntity> reviewDB = read(id);
+        if (reviewDB.isPresent()) {
+            mongoTemplate.remove(reviewDB.get());
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public List<UserEntity> readAll() {
+        return mongoTemplate.findAll(UserEntity.class);
     }
     
-    public Optional<UserEntity> findUserByUsername(String username) {
+    public Optional<UserEntity> readUserByUsername(String username) {
         Query query = new Query();
         query.addCriteria(Criteria.where("username").is(username));
         return Optional.ofNullable(mongoTemplate.findOne(query, UserEntity.class));
-    }
-
-    public Optional<UserEntity> findById(String id) {
-        return Optional.ofNullable(mongoTemplate.findById(id, UserEntity.class));
     }
 
     public Optional<UserEntity> updateAvatarID(String username, int avatarID) {
@@ -40,19 +68,5 @@ public class UserDAO {
         user.setAvatarId(avatarID);
         mongoTemplate.save(user);
         return Optional.ofNullable(user);
-    }
-
-    public Optional<UserEntity> update(UserEntity user) {
-        if (user == null || user.getId() == null) {
-            return Optional.empty();
-        }
-        mongoTemplate.save(user);
-        return Optional.ofNullable(user);
-    }
-
-    public void delete(String id) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("id").is(id));
-        mongoTemplate.remove(query, UserEntity.class);
     }
 }

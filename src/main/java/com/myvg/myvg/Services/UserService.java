@@ -30,7 +30,7 @@ public class UserService {
 
     public void registerUser(String username, String password, String email, int avatarID) throws IllegalArgumentException {
         
-        if (userDAO.findUserByUsername(username).isPresent()) {
+        if (userDAO.readUserByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Username already exists");
         }
         
@@ -40,13 +40,13 @@ public class UserService {
 
     public boolean loginUser(String username, String password) {
         
-        Optional<UserEntity> user = userDAO.findUserByUsername(username);
+        Optional<UserEntity> user = userDAO.readUserByUsername(username);
         String encodedPassword = user.get().getPassword();
         return user.isPresent() && passwordEncoder.matches(password, encodedPassword);
     }
 
     public UserDTO getUserById(String id) {
-        Optional<UserEntity> res = userDAO.findById(id);
+        Optional<UserEntity> res = userDAO.read(id);
         if (res.isPresent()) {
             return mapperUser.map(res.get(), new UserDTO());
         }
@@ -54,7 +54,7 @@ public class UserService {
     }
 
     public UserDTO getUserByUsername(String username) {
-        Optional<UserEntity> res = userDAO.findUserByUsername(username);
+        Optional<UserEntity> res = userDAO.readUserByUsername(username);
         if (res.isPresent()) {
             return mapperUser.map(res.get(), new UserDTO());
         }
@@ -63,7 +63,7 @@ public class UserService {
 
     public void deleteUser(String username, String password) {
         if (loginUser(username, password)) {
-            userDAO.findUserByUsername(username).ifPresent(user -> userDAO.delete(user.getId()));
+            userDAO.readUserByUsername(username).ifPresent(user -> userDAO.delete(user.getId()));
         }
     }
 
@@ -73,11 +73,11 @@ public class UserService {
     }
 
     public List<VideogameDTO> getWishlist(String userId) {
-        return mapperUser.map(userDAO.findById(userId), new UserDTO()).getWishlist();
+        return mapperUser.map(userDAO.read(userId), new UserDTO()).getWishlist();
     }
 
     public void removeFromWishlist(String userId, VideogameDTO videogame) {
-        userDAO.findById(userId).ifPresent(user -> {
+        userDAO.read(userId).ifPresent(user -> {
             user.getWishlist().removeIf(vg -> vg.getTitle().equals(videogame.getTitle()));
             userDAO.update(user);
         });

@@ -9,66 +9,70 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.myvg.myvg.EntityModel.ReviewEntity;
 import com.myvg.myvg.EntityModel.VideogameEntity;
 
 @Repository
-public class VideogameDAO {
+public class VideogameDAO implements IDAO<VideogameEntity> {
+
     @Autowired
     private final MongoTemplate mongoTemplate;
 
     public VideogameDAO(MongoTemplate mT) {
         this.mongoTemplate = mT;
     }
-
-
-    public void create(VideogameEntity videogameDTO) {
-        mongoTemplate.save(videogameDTO);   
+    
+    public Optional<VideogameEntity> create(VideogameEntity videogameEntity) {
+        return Optional.ofNullable(mongoTemplate.save(videogameEntity));
+    }
+    
+    public Optional<VideogameEntity> read(String id) {
+        return Optional.ofNullable(mongoTemplate.findById(id, VideogameEntity.class));
     }
 
-    public Optional<VideogameEntity> findByTitle(String title) {
+    public boolean update(VideogameEntity videogameUpdated) {
+        Optional<VideogameEntity> vgDB = read(videogameUpdated.getId());
+        if (vgDB.isPresent()) {
+            mongoTemplate.save(videogameUpdated);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean delete(String id) {
+        Optional<VideogameEntity> vgDB = read(id);
+        if (vgDB.isPresent()) {
+            mongoTemplate.remove(vgDB.get());
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public List<VideogameEntity> readAll() {
+        return mongoTemplate.findAll(VideogameEntity.class);
+    }
+    
+    public Optional<VideogameEntity> readByTitle(String title) {
         Query query = new Query();
         query.addCriteria(Criteria.where("title").is(title));
 
         return Optional.ofNullable(mongoTemplate.findOne(query, VideogameEntity.class));
     }
 
-    public Optional<VideogameEntity> findById(String id) {
-        return Optional.ofNullable(mongoTemplate.findById(id, VideogameEntity.class));
-    }
-
-    public List<VideogameEntity> findAll() {
-        return mongoTemplate.findAll(VideogameEntity.class);
-    }
-
-    public List<VideogameEntity> findByGenre(String genre) {
+    public List<VideogameEntity> readByGenre(String genre) {
         Query query = new Query();
         query.addCriteria(Criteria.where("genre").is(genre));
         return mongoTemplate.find(query, VideogameEntity.class);
     }   
 
-    public List<VideogameEntity> findByPlatform(String platform) {
+    public List<VideogameEntity> readByPlatform(String platform) {
         Query query = new Query();
         query.addCriteria(Criteria.where("platform").is(platform));
         return mongoTemplate.find(query, VideogameEntity.class);
     }
 
-    public Optional<VideogameEntity> update(VideogameEntity videogameUpdated) {
-        if (videogameUpdated == null || videogameUpdated.getId() == null) {
-            return Optional.empty();
-        }
-        
-        // Check if the entity exists
-        Optional<VideogameEntity> existing = findById(videogameUpdated.getId());
-        if (existing.isEmpty()) {
-            return Optional.empty();
-        }
-        
-        return Optional.of(mongoTemplate.save(videogameUpdated));
-    }
-
-    public void delete(String id) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("id").is(id));
-        mongoTemplate.remove(query, VideogameEntity.class);
-    }
 }

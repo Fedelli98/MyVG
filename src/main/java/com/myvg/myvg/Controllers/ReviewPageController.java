@@ -68,7 +68,7 @@ public class ReviewPageController {
             reviewService.postReview(new ReviewDTO(this.userDTO.getUsername(), this.videogameDTO.getTitle(), rating, comment.trim(),0));
 
             //update videogameDTO with new vgDTO revied
-            videogameService.findGameById(this.videogameDTO.getId())
+            videogameService.getGameById(this.videogameDTO.getId())
             .ifPresent(vgEntity -> {
                 this.videogameDTO = mapperReview.map(vgEntity, new VideogameDTO());
             });

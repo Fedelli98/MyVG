@@ -16,12 +16,10 @@ import org.springframework.context.ApplicationContext;
 import com.myvg.myvg.Services.SceneService;
 import com.myvg.myvg.DAO.VideogameDAO;
 import com.myvg.myvg.DTO.VideogameDTO;
+import com.myvg.myvg.Mapper.Mapper;
 import com.myvg.myvg.Mapper.MapperProfile;
 import com.myvg.myvg.Mapper.MapperProfileFactory;
 import com.myvg.myvg.Services.AppContext;
-
-
-
 
 
 @Controller
@@ -41,7 +39,7 @@ public class VideogameSearchController
 
     private List<VideogameDTO> gamesToDisplay = new ArrayList<>();
 
-    private final MapperProfile mapperVideogame = MapperProfileFactory.createMapperProfile(MapperProfileFactory.MapperProfileEnum.VIDEOGAME);
+    MapperProfile mapperVideogame = MapperProfileFactory.createMapperProfile(MapperProfileFactory.MapperProfileEnum.VIDEOGAME);
     
     @FXML
     private void onBack() 
@@ -64,17 +62,17 @@ public class VideogameSearchController
     public void setGames(String query) 
     {
 
-        gamesToDisplay.addAll(videogameDAO.findByTitle(query)
+        gamesToDisplay.addAll(videogameDAO.readByTitle(query)
             .stream()
             .map(videogameEntity -> mapperVideogame.map(videogameEntity, new VideogameDTO()))
             .collect(Collectors.toList()));
 
-            gamesToDisplay.addAll(videogameDAO.findByGenre(query)
+            gamesToDisplay.addAll(videogameDAO.readByGenre(query)
             .stream()
             .map(videogameEntity -> mapperVideogame.map(videogameEntity, new VideogameDTO()))
             .collect(Collectors.toList()));
 
-            gamesToDisplay.addAll(videogameDAO.findByPlatform(query)
+            gamesToDisplay.addAll(videogameDAO.readByPlatform(query)
             .stream()
             .map(videogameEntity -> mapperVideogame.map(videogameEntity, new VideogameDTO()))
             .collect(Collectors.toList()));
@@ -82,7 +80,7 @@ public class VideogameSearchController
             if(query == "")
             {
                 gamesToDisplay.clear();
-                gamesToDisplay.addAll(videogameDAO.findAll()
+                gamesToDisplay.addAll(videogameDAO.readAll()
                     .stream()
                     .map(videogameEntity -> mapperVideogame.map(videogameEntity, new VideogameDTO()))
                     .collect(Collectors.toList()));

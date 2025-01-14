@@ -120,7 +120,7 @@ public class VideogamePageController {
                 reviewService.likeReview(reviewId, currentUser.getId());
                 
                 //aggiorna il conesto (non funziona il mapper)
-                VideogameEntity currentvg = videogameService.findGameById(AppContext.getInstance().getCurrentVideogame().getId()).get();
+                VideogameEntity currentvg = videogameService.getGameById(AppContext.getInstance().getCurrentVideogame().getId()).get();
                 VideogameDTO upVideogamedto = mapperProfile.map(currentvg, new VideogameDTO());
                 AppContext.getInstance().setCurrentVideogame(upVideogamedto);
                 // Aggiorna la visualizzazione delle recensioni
