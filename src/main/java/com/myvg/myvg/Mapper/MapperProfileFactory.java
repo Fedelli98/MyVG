@@ -98,6 +98,7 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setUsername(source.getUsername()),
                                 (source, destination) -> destination.setVideogameTitle(source.getVideogameTitle()),
                                 (source, destination) -> destination.setRating(source.getRating()),
+                                (source, destination) -> destination.setLikes(source.getLikes()),
                                 (source, destination) -> destination.setComment(source.getComment())
                             ));
                         }},
@@ -105,6 +106,7 @@ public class MapperProfileFactory {
                             setExpressions(List.of(
                                 (source, destination) -> destination.setId(source.getId()),
                                 (source, destination) -> destination.setRating(source.getRating()),
+                                (source, destination) -> destination.setLikes(source.getLikes()),
                                 (source, destination) -> destination.setComment(source.getComment()),
                                 (source, destination) -> destination.setUsername(source.getUsername()),
                                 (source, destination) -> destination.setVideogameTitle(source.getVideogameTitle())

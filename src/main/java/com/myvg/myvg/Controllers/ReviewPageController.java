@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 
 import com.myvg.myvg.Services.VideogameService;
 import com.myvg.myvg.DTO.VideogameDTO;
-import com.myvg.myvg.EntityModel.ReviewEntity;
 import com.myvg.myvg.Mapper.MapperProfile;
 import com.myvg.myvg.Mapper.MapperProfileFactory;
 import com.myvg.myvg.DTO.ReviewDTO;
@@ -42,6 +41,7 @@ public class ReviewPageController {
     private VideogameDTO videogameDTO; // This should be set when review page is opened for a specific game
 
     private final MapperProfile mapperReview = MapperProfileFactory.createMapperProfile(MapperProfileEnum.REVIEW);
+    private final MapperProfile mapperVg = MapperProfileFactory.createMapperProfile(MapperProfileEnum.VIDEOGAME);
 
     public void setGameContext() {
         videogameDTO = AppContext.getInstance().getCurrentVideogame();
@@ -67,10 +67,10 @@ public class ReviewPageController {
         try {
             reviewService.postReview(new ReviewDTO(this.userDTO.getUsername(), this.videogameDTO.getTitle(), rating, comment.trim(),0));
 
-            //update videogameDTO with new vgDTO revied
+            //update videogameDTO with new vgDTO reviewd
             videogameService.getGameById(this.videogameDTO.getId())
             .ifPresent(vgEntity -> {
-                this.videogameDTO = mapperReview.map(vgEntity, new VideogameDTO());
+                this.videogameDTO = mapperVg.map(vgEntity, new VideogameDTO());
             });
 
             //update AppContext current Videogame and update queryList

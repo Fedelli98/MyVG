@@ -20,9 +20,6 @@ public class VideogameService {
     
     @Autowired
     private final VideogameDAO videogameDAO;
-    
-    @Autowired 
-    private final ReviewDAO reviewDAO;
 
     @Autowired
     private final UserDAO userDAO;
@@ -31,20 +28,11 @@ public class VideogameService {
 
     
 
-    public VideogameService(VideogameDAO videogameDAO, ReviewDAO reviewDAO, UserDAO userDAO) {
+    public VideogameService(VideogameDAO videogameDAO, UserDAO userDAO) {
         this.videogameDAO = videogameDAO;
-        this.reviewDAO = reviewDAO;
         this.userDAO = userDAO;
-        //TODO: move it to a config class
+
         this.mapperProfile = MapperProfileFactory.createMapperProfile(MapperProfileEnum.VIDEOGAME);
-
-    }
-
-    public void createVideoGame(VideogameDTO videogame) {
-        VideogameEntity videogameentity = new VideogameEntity();
-        videogameentity.setGenre("Action");
-        VideogameEntity videogameEntity = mapperProfile.map(videogame, videogameentity);
-        videogameDAO.create(videogameEntity);
     }
 
     public Optional<VideogameEntity> getGameById(String id) {

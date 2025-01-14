@@ -4,19 +4,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import com.myvg.myvg.Services.UserService;
-import com.myvg.myvg.Services.VideogameService;
 import com.myvg.myvg.Services.SceneService;
 import com.myvg.myvg.Services.AppContext;
 import com.myvg.myvg.DTO.UserDTO;
-import com.myvg.myvg.DTO.VideogameDTO;
 
 
 @Component

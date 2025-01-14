@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import com.myvg.myvg.DTO.ReviewDTO;
 import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.DTO.VideogameDTO;
-import com.myvg.myvg.EntityModel.ReviewEntity;
 import com.myvg.myvg.EntityModel.VideogameEntity;
 import com.myvg.myvg.Mapper.MapperProfile;
 import com.myvg.myvg.Mapper.MapperProfileFactory;
@@ -135,7 +134,6 @@ public class VideogamePageController {
 
             reviewContainer.getChildren().clear();
             if (videogameDTO.getReviews() != null) {
-                System.out.println(videogameDTO.getReviews().size());
                 for (ReviewDTO reviewDTO : videogameDTO.getReviews()) {
                     VBox reviewBox = new VBox(5);
                     reviewBox.setStyle("-fx-padding: 10; -fx-background-color: #f8f8f8; -fx-background-radius: 5;");

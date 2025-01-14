@@ -11,23 +11,16 @@ import com.myvg.myvg.DAO.VideogameDAO;
 import com.myvg.myvg.EntityModel.ReviewEntity;
 import com.myvg.myvg.EntityModel.UserEntity;
 import com.myvg.myvg.EntityModel.VideogameEntity;
-import com.myvg.myvg.Mapper.Mapper;
+
 import com.myvg.myvg.Mapper.MapperProfileFactory;
 import com.myvg.myvg.Mapper.MapperProfileFactory.MapperProfileEnum;
 import com.myvg.myvg.Mapper.MapperProfile;
 import com.myvg.myvg.DTO.ReviewDTO;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//IT'S REVIEW SERVICE RESPONSABILITY TO UPDATES THE REFERENCES 
-//IN VIDEOGAME ENTITY AND USER ENTITY (USER ENTITY DONT HAVE ANY REFERENCES TO REVIEW YET)
 @Service
 public class ReviewService {
-
-    //SERVICES ARE DECOUPLED. DO NOT COMMUNICATE WITH EACH OTHER Services()DAO
-    //ONLY COMMUNICATE WITH DAOs 
-
     private final ReviewDAO reviewDAO;
     private final UserDAO userDAO;
     private final VideogameDAO videogameDAO;
@@ -40,7 +33,8 @@ public class ReviewService {
         this.videogameDAO = videogameDAO;
     }
 
-    public boolean postReview(ReviewDTO reviewDTO) {
+    public boolean postReview(ReviewDTO reviewDTO) throws IllegalArgumentException
+    {
         if (validateReviewDTO(reviewDTO)) 
         {
             //get user
@@ -56,15 +50,15 @@ public class ReviewService {
             {
                 if(review.getUsername().equals(reviewDTO.getUsername()))
                 {
-                    return false;
+                    throw new IllegalArgumentException("Already posted a review for this game");
                 }
             }
 
             //insert review
             Optional<ReviewEntity> reviewPosted = reviewDAO.create(mapperReview.map(reviewDTO, new ReviewEntity()));
-            if(!reviewPosted.isPresent()) 
+            if(reviewPosted.isPresent()) 
             {
-                //update videogame
+                //update videogame entity
                 videogameDAO.readByTitle(reviewPosted.get().getVideogameTitle())
                 .ifPresent(vgEntity -> {
                     vgEntity.getReviews().add(reviewPosted.get());
@@ -77,7 +71,8 @@ public class ReviewService {
         return false;
     }
 
-    private boolean validateReviewDTO(ReviewDTO reviewDTO) {
+    private boolean validateReviewDTO(ReviewDTO reviewDTO) throws IllegalArgumentException
+    {
         if (reviewDTO == null) {
             throw new IllegalArgumentException("Review cannot be null");
         }
