@@ -16,7 +16,7 @@ import org.springframework.context.ApplicationContext;
 import com.myvg.myvg.Services.SceneService;
 import com.myvg.myvg.DAO.VideogameDAO;
 import com.myvg.myvg.DTO.VideogameDTO;
-import com.myvg.myvg.Mapper.Mapper;
+
 import com.myvg.myvg.Mapper.MapperProfile;
 import com.myvg.myvg.Mapper.MapperProfileFactory;
 import com.myvg.myvg.Services.AppContext;
@@ -52,13 +52,6 @@ public class VideogameSearchController
             });
     }
 
-    /**
-     * Sets the search query and displays matching videogames thumbnails.
-     * Searches by title, genre and platform.
-     * Creates thumbnails for each matching game and displays them in the games container.
-     * 
-     * @param query The search term to filter games by
-     */
     public void setGames(String query) 
     {
 

@@ -118,11 +118,12 @@ public class VideogamePageController {
             if (currentUser != null) {
                 reviewService.likeReview(reviewId, currentUser.getId());
                 
-                //aggiorna il conesto (non funziona il mapper)
+                //update vg and context
                 VideogameEntity currentvg = videogameService.getGameById(AppContext.getInstance().getCurrentVideogame().getId()).get();
                 VideogameDTO upVideogamedto = mapperProfile.map(currentvg, new VideogameDTO());
                 AppContext.getInstance().setCurrentVideogame(upVideogamedto);
-                // Aggiorna la visualizzazione delle recensioni
+
+                //update view
                 displayReviews();
             } else {
                 sceneService.showAlert("Error", "You must be logged in to like a review.");

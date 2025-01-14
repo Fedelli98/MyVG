@@ -40,7 +40,6 @@ public class ReviewPageController {
     private UserDTO userDTO; // This should be set when user logs in
     private VideogameDTO videogameDTO; // This should be set when review page is opened for a specific game
 
-    private final MapperProfile mapperReview = MapperProfileFactory.createMapperProfile(MapperProfileEnum.REVIEW);
     private final MapperProfile mapperVg = MapperProfileFactory.createMapperProfile(MapperProfileEnum.VIDEOGAME);
 
     public void setGameContext() {

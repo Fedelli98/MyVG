@@ -8,8 +8,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.control.Label;
-import java.util.Arrays;
-
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,10 +19,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-
-import com.myvg.myvg.DTO.VideogameDTO;
-import com.myvg.myvg.DAO.VideogameDAO;
-import com.myvg.myvg.EntityModel.ReviewEntity;
 import com.myvg.myvg.Services.AppContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -137,10 +131,8 @@ public class UserPageController {
 
     @FXML
     private void onGameSearch() {
-        
         sceneService.switchScene("/fxml/VideoGameSearch.fxml", 
-        (VideogameSearchController controller) -> 
-        {
+        (VideogameSearchController controller) -> {
             controller.setGames(gameSearchField.getText());
         });
     }

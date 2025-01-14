@@ -55,6 +55,7 @@ public class SceneService {
  * 
  * @author Luca Pandolfini
  */
+    @SuppressWarnings("unchecked")
     public <T> void switchScene(String fxmlPath, Consumer<T> initializer) {
         try 
         {
@@ -66,8 +67,7 @@ public class SceneService {
 
             var controller = loader.getController();
 
-            if(initializer != null && controller != null)
-            {
+            if(initializer != null && controller != null){
                 initializer.accept((T)controller);
             }
 

@@ -47,14 +47,12 @@ public class LoginController {
     }
 
     public boolean login(String username, String password) {
-        if (userService.loginUser(username, password)) 
-        {
+        if (userService.loginUser(username, password)) {
             UserDTO user = userService.getUserByUsername(username);
             AppContext.getInstance().setCurrentUser(user);
             return true;
         } 
-        else 
-        {
+        else {
             sceneService.showAlert("Login Failed", "Invalid username or password.");
             return false;
         }

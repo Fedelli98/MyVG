@@ -17,8 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.context.annotation.Scope;
 import com.myvg.myvg.Services.AppContext;
 
-//TODO: ADD SORT OF USER CONTEXT (AFTER LOGIN) AND VIDEOGAME CONTEXT (AFTER ENTERING IN A VIDEOGAME PAGE)
-
 @Controller
 @Scope("prototype")
 public class VideogameThumbnailController {

@@ -51,7 +51,7 @@ public class VideogameThumbnailWishlistController {
         releaseYearLabel.setText("Released: " + videogameDTO.getReleaseYear());
         platformLabel.setText("Platforms: " + String.join(", ", videogameDTO.getPlatform()));
 
-        // Carica l'immagine del gioco
+        //load game image
         try {
             gameImage.setImage(new Image(getClass().getResourceAsStream(videogameDTO.getVideogameCoverPath())));
         } catch (Exception e) {
