@@ -56,6 +56,8 @@ public class ReviewService {
 
             //insert review
             Optional<ReviewEntity> reviewPosted = reviewDAO.create(mapperReview.map(reviewDTO, new ReviewEntity()));
+            //update id on DTO;
+            reviewDTO.setId(reviewPosted.get().getId());
             if(reviewPosted.isPresent()) 
             {
                 //update videogame entity
@@ -125,7 +127,7 @@ public class ReviewService {
         return reviewDAO.readAll();
     }
 
-    public void removeReview(String id) {
+    public void delete(String id) {
         getReviewById(id).ifPresent(reviewEntity -> 
         {
             //update videogame
