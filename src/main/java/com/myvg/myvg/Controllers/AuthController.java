@@ -14,7 +14,7 @@ import com.myvg.myvg.DTO.UserDTO;
 
 
 @Component
-public class LoginController {
+public class AuthController {
     @FXML
     private TextField usernameField;
     @FXML

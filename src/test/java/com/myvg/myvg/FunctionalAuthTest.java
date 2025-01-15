@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.myvg.myvg.DTO.UserDTO;
-import com.myvg.myvg.Controllers.LoginController;
+import com.myvg.myvg.Controllers.AuthController;
 import com.myvg.myvg.Services.AppContext;
 import com.myvg.myvg.Services.UserService;
 
@@ -23,45 +23,31 @@ public class FunctionalAuthTest {
     private UserService userService;
 
     @Autowired
-    private LoginController loginController;
+    private AuthController authcontroller;
 
     private UserDTO testUser;
 
     @BeforeEach
     public void setUp() {
-        testUser = new UserDTO("Example", "example@gmail.com", 0, null, null);
+        testUser = new UserDTO("Example", "example@gmail.com", 
+                        0, null, null);
     }
-
-    //FUNCTIONAL TEST / INTEGRATION TEST
-    /**
-     * Test case for user registration and login functionality.
-     * 
-     * This test performs the following steps:
-     * 1. Registers a new user with the provided username, password, and email.
-     * 2. Retrieves the registered user by username and verifies that the username matches the expected value.
-     * 3. Logs in with the registered user's credentials.
-     * 4. Retrieves the currently logged-in user and verifies that the username matches the expected value.
-     * 
-     * @throws Exception if any error occurs during the test execution
-     */
     @Test
     public void testUserRegistrationAndLogin() throws Exception {
         
         //reg test
-        loginController.register(testUser.getUsername(), "password", testUser.getEmail());
+        authcontroller.register(testUser.getUsername(), "password", testUser.getEmail());
         UserDTO registeredUser = userService.getUserByUsername("Example");
 
         assertNotNull(registeredUser);
         assertEquals(testUser.getUsername(), registeredUser.getUsername());
         
         //login test
-        loginController.login("Example", "password");
+        authcontroller.login("Example", "password");
         UserDTO loggedUser = AppContext.getInstance().getCurrentUser();
 
         assertNotNull(loggedUser);
         assertEquals(testUser.getUsername(), loggedUser.getUsername());
-
-
     }
 
     //INTEGRATION TEST
