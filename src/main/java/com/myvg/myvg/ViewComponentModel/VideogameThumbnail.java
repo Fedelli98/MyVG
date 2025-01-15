@@ -17,10 +17,7 @@ public class VideogameThumbnail {
     public VideogameThumbnail(VideogameDTO videogame) {
         this.title = videogame.getTitle();
         this.imagePath = videogame.getVideogameCoverPath();
-        this.avgRating = (int) videogame.getReviews().stream()
-            .mapToInt(review -> review.getRating())
-            .average()
-            .orElse(0.0);
+        this.avgRating = calculateAvgRating(videogame);
     }
 
     public String getTitle() {
@@ -45,5 +42,15 @@ public class VideogameThumbnail {
 
     public void setReviewScore(int avgRating) {
         this.avgRating = avgRating;
+    }
+
+    public int calculateAvgRating(VideogameDTO videogame) {
+        if(videogame.getReviews().isEmpty() || videogame.getReviews() == null) {
+            return 0;
+        }
+        return (int) videogame.getReviews().stream()
+            .mapToInt(review -> review.getRating())
+            .average()
+            .orElse(0.0);
     }
 }

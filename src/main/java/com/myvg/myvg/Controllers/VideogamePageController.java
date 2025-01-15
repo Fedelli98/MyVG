@@ -64,7 +64,7 @@ public class VideogamePageController {
         
             // Display platforms
             platformContainer.getChildren().clear();
-            for (String platform : videogameDTO.getPlatform()) {
+            for (String platform : videogameDTO.getPlatforms()) {
                 Label platformLabel = new Label(platform);
                 platformLabel.setStyle("-fx-padding: 5; -fx-background-color: #f0f0f0; -fx-background-radius: 5;");
                 platformContainer.getChildren().add(platformLabel);

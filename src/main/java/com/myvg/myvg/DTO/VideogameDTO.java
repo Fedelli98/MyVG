@@ -8,7 +8,7 @@ public class VideogameDTO {
     private String genre;
     private String videogameCoverPath;
     private int releaseYear;
-    private List<String> platform;
+    private List<String> platforms;
     private List<ReviewDTO> reviews;
 
     public VideogameDTO(String title, String genre, int releaseYear, List<String> platform, List<ReviewDTO> reviews) {
@@ -16,7 +16,7 @@ public class VideogameDTO {
         this.genre = genre;
         this.videogameCoverPath = retrieveImagePath(title);
         this.releaseYear = releaseYear;
-        this.platform = platform;
+        this.platforms = platform;
         this.reviews = reviews;
     }
 
@@ -34,8 +34,8 @@ public class VideogameDTO {
     public int getReleaseYear() { return releaseYear; }
     public void setReleaseYear(int releaseYear) { this.releaseYear = releaseYear; }
 
-    public List<String> getPlatform() { return platform; }
-    public void setPlatform(List<String> platform) { this.platform = platform; }
+    public List<String> getPlatforms() { return platforms; }
+    public void setPlatforms(List<String> platform) { this.platforms = platform; }
 
     public List<ReviewDTO> getReviews() { return reviews; }
     public void setReviews(List<ReviewDTO> reviews) { this.reviews = reviews; }

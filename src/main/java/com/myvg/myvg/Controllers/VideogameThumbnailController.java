@@ -11,6 +11,8 @@ import javafx.scene.control.ProgressBar;
 import com.myvg.myvg.Services.SceneService;
 import com.myvg.myvg.ViewComponentModel.VideogameThumbnail;
 import com.myvg.myvg.DTO.VideogameDTO;
+import com.myvg.myvg.Mapper.MapperProfile;
+import com.myvg.myvg.Mapper.MapperProfileFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +38,8 @@ public class VideogameThumbnailController {
     @FXML
     private Label scoreLabel;
 
+    MapperProfile mapperVgThumbnail = MapperProfileFactory.createMapperProfile(MapperProfileFactory.MapperProfileEnum.VGTHUMBNAIL);
+
     private VideogameDTO videogameDTO;
 
     private Image loadGameImage(String path) {
@@ -55,7 +59,7 @@ public class VideogameThumbnailController {
 
     public void setVideogame(VideogameDTO videogameDTO) {
         this.videogameDTO = videogameDTO;
-        VideogameThumbnail thumbnail = new VideogameThumbnail(videogameDTO);
+        VideogameThumbnail thumbnail = mapperVgThumbnail.map(videogameDTO, new VideogameThumbnail());
         titleLabel.setText(thumbnail.getTitle());
         
         // Imposta il rating

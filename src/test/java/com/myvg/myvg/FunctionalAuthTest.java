@@ -2,6 +2,7 @@ package com.myvg.myvg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.nullable;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ public class FunctionalAuthTest {
 
     @BeforeEach
     public void setUp() {
-        testUser = new UserDTO("Example", "example@gmail.com", 0, null);
+        testUser = new UserDTO("Example", "example@gmail.com", 0, null, null);
     }
 
     //FUNCTIONAL TEST / INTEGRATION TEST

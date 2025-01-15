@@ -53,7 +53,7 @@ public class ReviewPageController {
         String comment = commentArea.getText();
 
         if (comment == null || comment.trim().isEmpty()) {
-            sceneService.showAlert("Error", "Please write a comment befor e posting.");
+            sceneService.showAlert("Error", "Please write a comment before posting.");
             return;
         }
 
