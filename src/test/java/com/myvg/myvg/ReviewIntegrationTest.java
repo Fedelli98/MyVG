@@ -26,7 +26,6 @@ public class ReviewIntegrationTest {
                                         "The Last of Us Part I", 8, "Great game!", 10);
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-        assertThrows(IllegalArgumentException.class, () -> {
             reviewService.postReview(invalidRating);
         });
 
