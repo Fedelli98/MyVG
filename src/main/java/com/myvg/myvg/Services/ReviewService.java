@@ -57,9 +57,9 @@ public class ReviewService {
             //insert review
             Optional<ReviewEntity> reviewPosted = reviewDAO.create(mapperReview.map(reviewDTO, new ReviewEntity()));
             //update id on DTO;
-            reviewDTO.setId(reviewPosted.get().getId());
             if(reviewPosted.isPresent()) 
             {
+                reviewDTO.setId(reviewPosted.get().getId());
                 //update videogame entity
                 videogameDAO.readByTitle(reviewPosted.get().getVideogameTitle())
                 .ifPresent(vgEntity -> {
@@ -128,18 +128,19 @@ public class ReviewService {
     }
 
     public void delete(String id) {
-        getReviewById(id).ifPresent(reviewEntity -> 
+        Optional<ReviewEntity> reviewEntity = getReviewById(id);
+        if(reviewEntity.isPresent())
         {
             //update videogame
-            videogameDAO.readByTitle(reviewEntity.getVideogameTitle())
-                .ifPresent(vgEntity -> {
-                    vgEntity.getReviews().remove(reviewEntity);
-                    videogameDAO.update(vgEntity);
-                });
+            Optional<VideogameEntity> vgEntity = videogameDAO.readByTitle(reviewEntity.get().getVideogameTitle());
+                if(vgEntity.isPresent()){
+                    vgEntity.get().getReviews().remove(reviewEntity.get());
+                    videogameDAO.update(vgEntity.get());
+                }
 
             //update review
             reviewDAO.delete(id);
-        });
+        };
     }
 
     public boolean update(ReviewDTO reviewUpdated) {
