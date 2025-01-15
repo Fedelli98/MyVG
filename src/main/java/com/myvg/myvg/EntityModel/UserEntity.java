@@ -23,6 +23,8 @@ public class UserEntity {
     private int avatarID;
     @Field(name = "wishlist")
     private List<VideogameEntity> wishlist = new ArrayList<>();
+    @Field(name = "reviews")
+    private List<ReviewEntity> reviews = new ArrayList<>();
 
     public UserEntity() {
         this.wishlist = new ArrayList<>();
@@ -35,6 +37,7 @@ public class UserEntity {
         this.email = email;
         this.avatarID = avatarID;
         this.wishlist = new ArrayList<>();
+        this.reviews = new ArrayList<>();
     }
 
     public UserEntity(UserDTO userDTO) {
@@ -43,6 +46,7 @@ public class UserEntity {
         this.email = userDTO.getEmail();
         this.avatarID = userDTO.getAvatarID();
         this.wishlist = new ArrayList<>();
+        this.reviews = new ArrayList<>();
     }
 
     // Getters e Setters
@@ -63,6 +67,9 @@ public class UserEntity {
 
     public List<VideogameEntity> getWishlist() { return wishlist; }
     public void setWishlist(List<VideogameEntity> wishlist) { this.wishlist = wishlist; }
+
+    public List<ReviewEntity> getReviews() { return reviews; }
+    public void setReviews(List<ReviewEntity> reviews) { this.reviews = reviews; }
 }
 
 

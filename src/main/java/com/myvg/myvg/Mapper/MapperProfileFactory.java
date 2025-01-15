@@ -7,6 +7,8 @@ import com.myvg.myvg.DTO.ReviewDTO;
 import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.EntityModel.ReviewEntity;
 import com.myvg.myvg.EntityModel.UserEntity;
+import com.myvg.myvg.Services.AppContext;
+import com.myvg.myvg.ViewComponentModel.VideogameThumbnail;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +19,8 @@ public class MapperProfileFactory {
     public enum MapperProfileEnum {
         VIDEOGAME,
         USER,
-        REVIEW        
+        REVIEW,
+        VGTHUMBNAIL
     }
 
     public static MapperProfile createMapperProfile(MapperProfileEnum profile) {
@@ -34,7 +37,7 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setTitle(source.getTitle()),
                                 (source, destination) -> destination.setGenre(source.getGenre()),
                                 (source, destination) -> destination.setReleaseYear(source.getReleaseYear()),
-                                (source, destination) -> destination.setPlatform(source.getPlatform()),
+                                (source, destination) -> destination.setPlatform(source.getPlatforms()),
                                 (source, destination) -> destination.setReviews(source.getReviews().stream()
                                 .map(reviewDTO -> mapperReview.map(reviewDTO, new ReviewEntity()))
                                 .collect(Collectors.toList()))
@@ -46,7 +49,7 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setTitle(source.getTitle()),
                                 (source, destination) -> destination.setGenre(source.getGenre()),
                                 (source, destination) -> destination.setReleaseYear(source.getReleaseYear()),
-                                (source, destination) -> destination.setPlatform(source.getPlatform()),
+                                (source, destination) -> destination.setPlatforms(source.getPlatform()),
                                 (source, destination) -> destination.setVideogameCoverPath(),
                                 (source, destination) -> destination.setReviews(source.getReviews().stream()
                                     .map(reviewEntity -> mapperReview.map(reviewEntity, new ReviewDTO()))
@@ -57,8 +60,8 @@ public class MapperProfileFactory {
                 }};
             case USER:
 
-            var mapperVideogame = MapperProfileFactory.createMapperProfile(MapperProfileFactory.MapperProfileEnum.VIDEOGAME);
-
+            var mapperVideogames = MapperProfileFactory.createMapperProfile(MapperProfileFactory.MapperProfileEnum.VIDEOGAME);
+            var mapperReviews = MapperProfileFactory.createMapperProfile(MapperProfileFactory.MapperProfileEnum.REVIEW);
                 return new MapperProfile() {{
                     setMappers(List.of(
                         new Mapper<UserDTO, UserEntity>(UserDTO.class, UserEntity.class) {{
@@ -68,7 +71,10 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setEmail(source.getEmail()),
                                 (source, destination) -> destination.setAvatarId(source.getAvatarID()),
                                 (source, destination) -> destination.setWishlist(source.getWishlist().stream()
-                                    .map(videogameDTO -> mapperVideogame.map(videogameDTO, new VideogameEntity()))
+                                    .map(videogameDTO -> mapperVideogames.map(videogameDTO, new VideogameEntity()))
+                                    .collect(Collectors.toList())),
+                                (source, destination) -> destination.setReviews(source.getReviews().stream()
+                                    .map(reviewDTO -> mapperReviews.map(reviewDTO, new ReviewEntity()))
                                     .collect(Collectors.toList()))
                             ));
                         }},
@@ -79,7 +85,10 @@ public class MapperProfileFactory {
                                 (source, destination) -> destination.setEmail(source.getEmail()),
                                 (source, destination) -> destination.setAvatarID(source.getAvatarId()),
                                 (source, destination) -> destination.setWishlist(source.getWishlist().stream()
-                                    .map(videogameEntity -> mapperVideogame.map(videogameEntity, new VideogameDTO()))
+                                    .map(videogameEntity -> mapperVideogames.map(videogameEntity, new VideogameDTO()))
+                                    .collect(Collectors.toList())),
+                                (source, destination) -> destination.setReviews(source.getReviews().stream()
+                                    .map(reviewEntity -> mapperReviews.map(reviewEntity, new ReviewDTO()))
                                     .collect(Collectors.toList()))
                             ));
                         }}
@@ -109,6 +118,17 @@ public class MapperProfileFactory {
                             ));
                         }}
                     ));
+                }};
+            case VGTHUMBNAIL:
+                return new MapperProfile(){{
+                    setMappers(List.of(
+                        new Mapper<VideogameDTO, VideogameThumbnail>(VideogameDTO.class, VideogameThumbnail.class) {{
+                            setExpressions(List.of(
+                                (source, destination) -> destination.setTitle(source.getTitle()),
+                                (source, destination) -> destination.setImagePath(source.getVideogameCoverPath()),
+                                (source, destination) -> destination.setReviewScore((destination.calculateAvgRating(source)))
+                        ));
+                    }}));
                 }};
             default:
                 return null;

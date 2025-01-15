@@ -18,21 +18,22 @@ public class ReviewIntegrationTest {
     @Test
     void testPostReview() {
         // Arrange
-        ReviewDTO invalidRating = new ReviewDTO("testUser", "testVideogame", -1, "Great game!", 10);
-        ReviewDTO invalidComment = new ReviewDTO("testUser", "testVideogame", 8, "", 10);
-        ReviewDTO validReview = new ReviewDTO("testUser", "The Last of Us Part I", 8, "Great game!", 10);
-
+        ReviewDTO invalidRating = new ReviewDTO("testUser", 
+                                        "testVideogame", -1, "Great game!", 10);
+        ReviewDTO invalidLikes = new ReviewDTO("testUser", 
+                                        "testVideogame", 8, "", -1);
+        ReviewDTO validReview = new ReviewDTO("testUser", 
+                                        "The Last of Us Part I", 8, "Great game!", 10);
         // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
         assertThrows(IllegalArgumentException.class, () -> {
             reviewService.postReview(invalidRating);
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            reviewService.postReview(invalidComment);
+            reviewService.postReview(invalidLikes);
         });
-
-        var result = reviewService.postReview(validReview);
-
+        boolean result = reviewService.postReview(validReview);
         assertEquals(result, true);
         reviewService.delete(validReview.getId());
     }
@@ -40,9 +41,10 @@ public class ReviewIntegrationTest {
     @Test
     void testUserCannotReviewSameGameTwice() {
         // Arrange
-        ReviewDTO firstReview = new ReviewDTO("testUser", "The Last of Us Part I", 8, "Great game!", 10);
-        ReviewDTO secondReview = new ReviewDTO("testUser", "The Last of Us Part I", 8, "Great game!", 10);
-
+        ReviewDTO firstReview = new ReviewDTO("testUser", 
+                        "The Last of Us Part I", 8, "Great game!", 10);
+        ReviewDTO secondReview = new ReviewDTO(
+                        "testUser", "The Last of Us Part I", 8, "Great game!", 10);
         // Act & Assert
         reviewService.postReview(firstReview);
         

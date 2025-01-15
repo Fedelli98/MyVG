@@ -18,10 +18,7 @@ import java.util.Optional;
 @Service
 public class VideogameService {
     
-    @Autowired
     private final VideogameDAO videogameDAO;
-
-    @Autowired
     private final UserDAO userDAO;
 
     private final MapperProfile mapperVg;
@@ -69,11 +66,11 @@ public class VideogameService {
     public boolean update(VideogameDTO videogame) {
         return videogameDAO.update(mapperVg.map(videogame, new VideogameEntity()));
     }
-
     public void delete(String id) {
         videogameDAO.delete(id);
     }
-
+    //#endregion
+    
     public void addToWishlist(String userId, VideogameDTO videogameDTO) {
         userDAO.read(userId).ifPresent(user -> {
             VideogameEntity videogameEntity = mapperVg.map(videogameDTO, new VideogameEntity());

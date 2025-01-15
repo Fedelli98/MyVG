@@ -52,34 +52,34 @@ public class VideogamePageController {
     @Autowired
     private ReviewService reviewService;
     
-        public void setVideogame() {
-            this.videogameDTO = AppContext.getInstance().getCurrentVideogame();
+    public void setVideogame() {
+        this.videogameDTO = AppContext.getInstance().getCurrentVideogame();
+
+        titleText.setText(videogameDTO.getTitle());
+        genreText.setText("Genre: " + videogameDTO.getGenre());
+        releaseYearText.setText("Released: " + videogameDTO.getReleaseYear());
     
-            titleText.setText(videogameDTO.getTitle());
-            genreText.setText("Genre: " + videogameDTO.getGenre());
-            releaseYearText.setText("Released: " + videogameDTO.getReleaseYear());
-        
-            // Display platforms
-            platformContainer.getChildren().clear();
-            for (String platform : videogameDTO.getPlatform()) {
-                Label platformLabel = new Label(platform);
-                platformLabel.setStyle("-fx-padding: 5; -fx-background-color: #f0f0f0; -fx-background-radius: 5;");
-                platformContainer.getChildren().add(platformLabel);
-            }
-    
-            displayReviews();
+        // Display platforms
+        platformContainer.getChildren().clear();
+        for (String platform : videogameDTO.getPlatforms()) {
+            Label platformLabel = new Label(platform);
+            platformLabel.setStyle("-fx-padding: 5; -fx-background-color: #f0f0f0; -fx-background-radius: 5;");
+            platformContainer.getChildren().add(platformLabel);
         }
-    
-        @FXML
-        private void onAddReview() {
+
+        displayReviews();
+    }
+
+    @FXML
+    private void onAddReview() {
             sceneService.switchScene("/fxml/ReviewPage.fxml", 
             (ReviewPageController controller) -> {
                 controller.setGameContext();
             });
         }
-    
-        @FXML
-        private void onBack() {
+
+    @FXML
+    private void onBack() {
             AppContext.getInstance().clearCurrentVideogame();
     
             sceneService.switchScene("/fxml/VideogameSearch.fxml", 
@@ -87,9 +87,9 @@ public class VideogamePageController {
                 controller.setGames();
             });
         }
-    
-        @FXML
-        private void onAddToWishlist() {
+
+    @FXML
+    private void onAddToWishlist() {
             //Retrieve context
             UserDTO currentUser = AppContext.getInstance().getCurrentUser();
             VideogameDTO currentGame = AppContext.getInstance().getCurrentVideogame();

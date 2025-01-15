@@ -7,14 +7,16 @@ public class UserDTO {
     private String email;
     private int avatarID;
     private List<VideogameDTO> wishlist;
+    private List<ReviewDTO> reviews;
 
     public UserDTO() {}
     
-    public UserDTO(String username, String email, int avatarID, List<VideogameDTO> wishlist) {
+    public UserDTO(String username, String email, int avatarID, List<VideogameDTO> wishlist, List<ReviewDTO> reviews) {
         this.username = username;
         this.email = email;
         this.avatarID = avatarID;
         this.wishlist = wishlist;
+        this.reviews = reviews;
     }
 
     public String getId() { return id; }
@@ -31,4 +33,7 @@ public class UserDTO {
 
     public List<VideogameDTO> getWishlist() { return wishlist; }
     public void setWishlist(List<VideogameDTO> wishlist) { this.wishlist = wishlist; }
+
+    public List<ReviewDTO> getReviews() { return reviews; }
+    public void setReviews(List<ReviewDTO> reviews) { this.reviews = reviews; }
 }

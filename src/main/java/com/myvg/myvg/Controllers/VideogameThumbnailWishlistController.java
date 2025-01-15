@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import com.myvg.myvg.DTO.VideogameDTO;
+import com.myvg.myvg.Mapper.MapperProfile;
+import com.myvg.myvg.Mapper.MapperProfileFactory;
 import com.myvg.myvg.Services.UserService;
 import com.myvg.myvg.Services.AppContext;
 import com.myvg.myvg.ViewComponentModel.VideogameThumbnail;
@@ -39,17 +41,19 @@ public class VideogameThumbnailWishlistController {
 
     @Autowired
     private WishlistController wishlistController;
+    
+    MapperProfile mapperVgThumbnail = MapperProfileFactory.createMapperProfile(MapperProfileFactory.MapperProfileEnum.VGTHUMBNAIL);
 
     private VideogameDTO videogameDTO;
 
     public void setVideogame(VideogameDTO videogameDTO) {
         this.videogameDTO = videogameDTO;
-        VideogameThumbnail thumbnail = new VideogameThumbnail(videogameDTO);
+        VideogameThumbnail thumbnail = mapperVgThumbnail.map(videogameDTO, new VideogameThumbnail());
         titleLabel.setText(thumbnail.getTitle());
         scoreLabel.setText(String.valueOf(thumbnail.getReviewScore()));
         genreLabel.setText("Genre: " + videogameDTO.getGenre());
         releaseYearLabel.setText("Released: " + videogameDTO.getReleaseYear());
-        platformLabel.setText("Platforms: " + String.join(", ", videogameDTO.getPlatform()));
+        platformLabel.setText("Platforms: " + String.join(", ", videogameDTO.getPlatforms()));
 
         //load game image
         try {
