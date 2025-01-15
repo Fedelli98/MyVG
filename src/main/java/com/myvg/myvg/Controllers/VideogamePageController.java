@@ -1,6 +1,5 @@
 package com.myvg.myvg.Controllers;
 
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
@@ -12,7 +11,7 @@ import javafx.scene.control.Button;
 import com.myvg.myvg.DTO.ReviewDTO;
 import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.DTO.VideogameDTO;
-import com.myvg.myvg.EntityModel.VideogameEntity;
+
 import com.myvg.myvg.Mapper.MapperProfile;
 import com.myvg.myvg.Mapper.MapperProfileFactory;
 import com.myvg.myvg.Mapper.MapperProfileFactory.MapperProfileEnum;
@@ -43,8 +42,6 @@ public class VideogamePageController {
     private Button addToWishlistButton;
 
     private VideogameDTO videogameDTO;
-    
-    private final MapperProfile mapperProfile = MapperProfileFactory.createMapperProfile(MapperProfileEnum.VIDEOGAME);
 
     @Autowired
     private VideogameService videogameService;
@@ -119,8 +116,7 @@ public class VideogamePageController {
                 reviewService.likeReview(reviewId, currentUser.getId());
                 
                 //update vg and context
-                VideogameEntity currentvg = videogameService.getGameById(AppContext.getInstance().getCurrentVideogame().getId()).get();
-                VideogameDTO upVideogamedto = mapperProfile.map(currentvg, new VideogameDTO());
+                VideogameDTO upVideogamedto = videogameService.getGameById(AppContext.getInstance().getCurrentVideogame().getId()).get();
                 AppContext.getInstance().setCurrentVideogame(upVideogamedto);
 
                 //update view

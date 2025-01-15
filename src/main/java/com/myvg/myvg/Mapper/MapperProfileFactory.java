@@ -2,15 +2,11 @@ package com.myvg.myvg.Mapper;
 
 import com.myvg.myvg.EntityModel.VideogameEntity;
 
-import javafx.beans.binding.SetExpression;
-
 import com.myvg.myvg.DTO.VideogameDTO;
 import com.myvg.myvg.DTO.ReviewDTO;
 import com.myvg.myvg.DTO.UserDTO;
 import com.myvg.myvg.EntityModel.ReviewEntity;
 import com.myvg.myvg.EntityModel.UserEntity;
-import com.myvg.myvg.Services.AppContext;
-
 
 import java.util.List;
 import java.util.stream.Collectors;

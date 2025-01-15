@@ -16,7 +16,7 @@ import com.myvg.myvg.Services.AppContext;
 import com.myvg.myvg.Services.UserService;
 
 @SpringBootTest
-public class FunctionalAuthTest {
+public class AuthFunctionalTest {
 
     @Autowired
     private UserService userService;

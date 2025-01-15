@@ -1,23 +1,16 @@
 package com.myvg.myvg;
 
 import com.myvg.myvg.DTO.ReviewDTO;
-import com.myvg.myvg.DTO.UserDTO;
-import com.myvg.myvg.EntityModel.UserEntity;
-import com.myvg.myvg.EntityModel.VideogameEntity;
 import com.myvg.myvg.Services.ReviewService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ReviewIntegrationTest {
-
-    private static final Logger logger = LoggerFactory.getLogger(ReviewIntegrationTest.class);
 
     @Autowired
     private ReviewService reviewService;
@@ -30,18 +23,15 @@ public class ReviewIntegrationTest {
         ReviewDTO validReview = new ReviewDTO("testUser", "The Last of Us Part I", 8, "Great game!", 10);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> 
-        {
+        assertThrows(IllegalArgumentException.class, () -> {
             reviewService.postReview(invalidRating);
         });
 
-        assertThrows(IllegalArgumentException.class, () -> 
-        {
+        assertThrows(IllegalArgumentException.class, () -> {
             reviewService.postReview(invalidComment);
         });
 
         var result = reviewService.postReview(validReview);
-        logger.info("Review posted successfully: {}", result);
 
         assertEquals(result, true);
         reviewService.delete(validReview.getId());
