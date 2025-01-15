@@ -18,15 +18,10 @@ import java.util.Optional;
 @Service
 public class VideogameService {
     
-    @Autowired
     private final VideogameDAO videogameDAO;
-
-    @Autowired
     private final UserDAO userDAO;
-
-    private final MapperProfile mapperProfile;
-
     
+    private final MapperProfile mapperProfile;
 
     public VideogameService(VideogameDAO videogameDAO, UserDAO userDAO) {
         this.videogameDAO = videogameDAO;
@@ -35,34 +30,30 @@ public class VideogameService {
         this.mapperProfile = MapperProfileFactory.createMapperProfile(MapperProfileEnum.VIDEOGAME);
     }
 
+    //#region CRUD
     public Optional<VideogameEntity> getGameById(String id) {
         return videogameDAO.read(id);
     }
-
     public Optional<VideogameEntity> getGameByTitle(String title) {
         return videogameDAO.readByTitle(title);
     }
-
     public List<VideogameEntity> getAllGames() {
         return videogameDAO.readAll();
     }
-
     public List<VideogameEntity> getGamesByGenre(String genre) {
         return videogameDAO.readByGenre(genre);
     }
-
     public List<VideogameEntity> getGamesByPlatform(String platform) {
         return videogameDAO.readByPlatform(platform);
     }
-
     public boolean update(VideogameEntity videogame) {
         return videogameDAO.update(videogame);
     }
-
     public void delete(String id) {
         videogameDAO.delete(id);
     }
-
+    //#endregion
+    
     public void addToWishlist(String userId, VideogameDTO videogameDTO) {
         userDAO.read(userId).ifPresent(user -> {
             VideogameEntity videogameEntity = mapperProfile.map(videogameDTO, new VideogameEntity());

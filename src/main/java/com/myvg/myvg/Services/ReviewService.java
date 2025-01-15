@@ -95,6 +95,10 @@ public class ReviewService {
             throw new IllegalArgumentException("Rating must be between 1 and 10");
         }
 
+        if (reviewDTO.getLikes() < 0) {
+            throw new IllegalArgumentException("Likes cannot be negative");
+        }
+
         return true;
     }
 

@@ -55,34 +55,34 @@ public class VideogamePageController {
     @Autowired
     private ReviewService reviewService;
     
-        public void setVideogame() {
-            this.videogameDTO = AppContext.getInstance().getCurrentVideogame();
+    public void setVideogame() {
+        this.videogameDTO = AppContext.getInstance().getCurrentVideogame();
+
+        titleText.setText(videogameDTO.getTitle());
+        genreText.setText("Genre: " + videogameDTO.getGenre());
+        releaseYearText.setText("Released: " + videogameDTO.getReleaseYear());
     
-            titleText.setText(videogameDTO.getTitle());
-            genreText.setText("Genre: " + videogameDTO.getGenre());
-            releaseYearText.setText("Released: " + videogameDTO.getReleaseYear());
-        
-            // Display platforms
-            platformContainer.getChildren().clear();
-            for (String platform : videogameDTO.getPlatforms()) {
-                Label platformLabel = new Label(platform);
-                platformLabel.setStyle("-fx-padding: 5; -fx-background-color: #f0f0f0; -fx-background-radius: 5;");
-                platformContainer.getChildren().add(platformLabel);
-            }
-    
-            displayReviews();
+        // Display platforms
+        platformContainer.getChildren().clear();
+        for (String platform : videogameDTO.getPlatforms()) {
+            Label platformLabel = new Label(platform);
+            platformLabel.setStyle("-fx-padding: 5; -fx-background-color: #f0f0f0; -fx-background-radius: 5;");
+            platformContainer.getChildren().add(platformLabel);
         }
-    
-        @FXML
-        private void onAddReview() {
+
+        displayReviews();
+    }
+
+    @FXML
+    private void onAddReview() {
             sceneService.switchScene("/fxml/ReviewPage.fxml", 
             (ReviewPageController controller) -> {
                 controller.setGameContext();
             });
         }
-    
-        @FXML
-        private void onBack() {
+
+    @FXML
+    private void onBack() {
             AppContext.getInstance().clearCurrentVideogame();
     
             sceneService.switchScene("/fxml/VideogameSearch.fxml", 
@@ -90,9 +90,9 @@ public class VideogamePageController {
                 controller.setGames();
             });
         }
-    
-        @FXML
-        private void onAddToWishlist() {
+
+    @FXML
+    private void onAddToWishlist() {
             //Retrieve context
             UserDTO currentUser = AppContext.getInstance().getCurrentUser();
             VideogameDTO currentGame = AppContext.getInstance().getCurrentVideogame();
@@ -111,51 +111,48 @@ public class VideogamePageController {
             UserDTO user = userService.getUserById(currentUser.getId());
             AppContext.getInstance().setCurrentUser(user);
         }
-    
-        @FXML
-        private void handleLikeReview(String reviewId) {
-            UserDTO currentUser = AppContext.getInstance().getCurrentUser();
-            if (currentUser != null) {
-                reviewService.likeReview(reviewId, currentUser.getId());
+
+    @FXML
+    private void handleLikeReview(String reviewId) {
+        UserDTO currentUser = AppContext.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            reviewService.likeReview(reviewId, currentUser.getId());
+            
+            //update vg and context
+            VideogameEntity currentvg = videogameService.getGameById(AppContext.getInstance().getCurrentVideogame().getId()).get();
+            VideogameDTO upVideogamedto = mapperProfile.map(currentvg, new VideogameDTO());
+            AppContext.getInstance().setCurrentVideogame(upVideogamedto);
+            //update view
+            displayReviews();
+        } else {
+            sceneService.showAlert("Error", "You must be logged in to like a review.");
+        }
+    }
+    private void displayReviews(){
+        this.videogameDTO = AppContext.getInstance().getCurrentVideogame();
+        reviewContainer.getChildren().clear();
+        if (videogameDTO.getReviews() != null) {
+            for (ReviewDTO reviewDTO : videogameDTO.getReviews()) {
+                VBox reviewBox = new VBox(5);
+                reviewBox.setStyle("-fx-padding: 10; -fx-background-color: #f8f8f8; -fx-background-radius: 5;");
                 
-                //update vg and context
-                VideogameEntity currentvg = videogameService.getGameById(AppContext.getInstance().getCurrentVideogame().getId()).get();
-                VideogameDTO upVideogamedto = mapperProfile.map(currentvg, new VideogameDTO());
-                AppContext.getInstance().setCurrentVideogame(upVideogamedto);
-
-                //update view
-                displayReviews();
-            } else {
-                sceneService.showAlert("Error", "You must be logged in to like a review.");
+                Text usernameText = new Text(reviewDTO.getUsername());
+                usernameText.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+                
+                Text reviewText = new Text(reviewDTO.getComment());
+                reviewText.setWrappingWidth(400);
+                
+                Text scoreText = new Text("Score: " + reviewDTO.getRating() + "/10");
+                scoreText.setStyle("-fx-font-weight: bold;");
+                
+                Text likesText = new Text("Likes: " + reviewDTO.getLikes());
+                
+                ToggleButton likeButton = new ToggleButton("Like");
+                likeButton.setOnAction(e -> handleLikeReview(reviewDTO.getId()));
+                
+                reviewBox.getChildren().addAll(usernameText, scoreText, reviewText, likesText, likeButton);
+                reviewContainer.getChildren().add(reviewBox);
             }
         }
-
-        private void displayReviews(){
-            this.videogameDTO = AppContext.getInstance().getCurrentVideogame();
-
-            reviewContainer.getChildren().clear();
-            if (videogameDTO.getReviews() != null) {
-                for (ReviewDTO reviewDTO : videogameDTO.getReviews()) {
-                    VBox reviewBox = new VBox(5);
-                    reviewBox.setStyle("-fx-padding: 10; -fx-background-color: #f8f8f8; -fx-background-radius: 5;");
-                    
-                    Text usernameText = new Text(reviewDTO.getUsername());
-                    usernameText.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
-                    
-                    Text reviewText = new Text(reviewDTO.getComment());
-                    reviewText.setWrappingWidth(400);
-                    
-                    Text scoreText = new Text("Score: " + reviewDTO.getRating() + "/10");
-                    scoreText.setStyle("-fx-font-weight: bold;");
-                    
-                    Text likesText = new Text("Likes: " + reviewDTO.getLikes());
-                    
-                    ToggleButton likeButton = new ToggleButton("Like");
-                    likeButton.setOnAction(e -> handleLikeReview(reviewDTO.getId()));
-                    
-                    reviewBox.getChildren().addAll(usernameText, scoreText, reviewText, likesText, likeButton);
-                    reviewContainer.getChildren().add(reviewBox);
-                }
-            }
-        }
+    }
 }

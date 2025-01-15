@@ -26,8 +26,8 @@ public class ReviewIntegrationTest {
         // Arrange
         ReviewDTO invalidRating = new ReviewDTO("testUser", 
                                         "testVideogame", -1, "Great game!", 10);
-        ReviewDTO invalidComment = new ReviewDTO("testUser", 
-                                        "testVideogame", 8, "", 10);
+        ReviewDTO invalidLikes = new ReviewDTO("testUser", 
+                                        "testVideogame", 8, "", -1);
         ReviewDTO validReview = new ReviewDTO("testUser", 
                                         "The Last of Us Part I", 8, "Great game!", 10);
         // Act & Assert
@@ -36,7 +36,7 @@ public class ReviewIntegrationTest {
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            reviewService.postReview(invalidComment);
+            reviewService.postReview(invalidLikes);
         });
         boolean result = reviewService.postReview(validReview);
         assertEquals(result, true);
